@@ -1,5 +1,5 @@
 Type=Exe
-Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\..\..\..\..\..\Windows\SysWOW64\stdole2.tlb#OLE Automation
+Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#C:\Windows\SysWOW64\stdole2.tlb#OLE Automation
 Object={BEC61919-E6C4-11D1-BE7D-C63815000000}#1.0#0; FLEXWIZ.OCX
 Form=Forms\Form1.frm
 Module=MNew; Modules\MNew.bas
@@ -8,6 +8,7 @@ Class=List; Classes\List.cls
 Class=Person; Classes\Person.cls
 Class=lambdas; Classes\lambdas.cls
 Class=VBListBox; Classes\VBListBox.cls
+ResFile32="Resources\MyRes.RES"
 IconForm="Form1"
 Startup="Form1"
 ExeName32="GenericListNLinq.exe"
