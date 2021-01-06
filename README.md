@@ -10,7 +10,7 @@ a) Collection
 Pro: 1) can hold arbitrary data-types (except for Udts coming not from tlb/axdll)  
 Pro: 2) already has some useful functions: Add, Count, Item, Remove, For Each  
 Pro: 3) already has some basic hashing-functionality  
-Contra: 1) Memory comsumption can be rather high, because da every element is stored as a Variant (even bytes).  
+Contra: 1) Memory comsumption can be rather high, because every element (even byte) is stored as a Variant (=16byte).  
 Contra: 2) Data is not contained in contiguous memory   
 Contra: 3) there is no possilibity for direct accessing the elements and no possibilities to access the data via pointer. You have to take the Collection-class as it is.  
   
