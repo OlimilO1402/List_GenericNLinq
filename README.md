@@ -1,5 +1,5 @@
 # List_GenericNLinq
-## VBC.Lists.Generic and some Linq-related functions
+## VBC.Lists.Generic and some Linq-related functions  
 a para-generic list-class in VBC.  
 For using a container for objects in VBC we have the following possibilities:  
 a) Collection  
@@ -34,4 +34,5 @@ As datapointer (resp. as Array-variable) there is a variant applied.
 
 Finally the list has got some functions to mimic a behaviour very much like Linq in .net.  
 
+Project started around 2005 after wobbling around the list-class in my mind for many years and updated it constantly.
 ![GenericListLinq Image](Resources/GenericListLinq.png "GenericListLinq Image") 
