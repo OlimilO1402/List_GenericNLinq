@@ -220,7 +220,7 @@ Begin VB.Form Form1
       Width           =   2055
    End
    Begin VB.Label Label8 
-      Caption         =   "Some tests lean against Linq:"
+      Caption         =   "Test functions similar to Linq:"
       Height          =   255
       Left            =   120
       TabIndex        =   32
