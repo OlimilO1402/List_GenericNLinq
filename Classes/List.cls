@@ -17,6 +17,7 @@ Option Explicit
 ' typedef  enum tagVARENUM
 ' {
 Public Enum EDataType 'Public Enum Extended VbVarType
+    'vbNone = 0
     'Values like vbEmpty, vbNull, vbError are missing here
     'beacuse these types can't be stored in an array anyway
     vbInteger = VbVarType.vbInteger    '   2   '   VT_I2          = 0x0002,
@@ -231,9 +232,11 @@ End Function
 Public Function Add(avar)
     ' Fügt am Ende der Liste ein Objekt hinzu
     If IsMissing(avar) Then Exit Function
-    Dim dt As EDataType: dt = VarType(avar)
-    If (dt = vbUserDefinedType And m_bytLen = 0) Then m_bytLen = LenB(avar)
     If m_DataType = vbEmpty Then
+        'Dreckmist, bei einem default-Property wird nur der Typ des Default props ermittelt
+        'when Object has default prop get the type in another way, better directly from reading the variant
+        Dim dt As EDataType: dt = VarType(avar)
+        If (dt = vbUserDefinedType And m_bytLen = 0) Then m_bytLen = LenB(avar)
         m_DataType = dt
         InitGenericArray m_DataType
     End If
@@ -392,15 +395,18 @@ End Property
 
 Public Sub Clear()
     'Entfernt alle Elemente aus der List
-    m_DataType = vbEmpty
+    'Oh shit, soll der Typ wirklich auch gelöscht werden?
+    'nein Oh nein am besten nicht!
+    'm_DataType = vbEmpty
     m_Count = 0
-    m_GrowRate = 0
+    'm_GrowRate = 0
     m_Capacity = 32
-    m_bytLen = 0
+    'm_bytLen = 0
     'm_Capacity = 0
     Set m_HashI = Nothing
     m_IsHashed = False
     Class_Initialize
+    ReDim m_Arr(0 To m_Capacity - 1)
 End Sub
 
 Public Function Clone() As List
@@ -793,7 +799,16 @@ Public Sub RemoveLast()
     m_Count = m_Count - 1
 End Sub
 
- 
+Public Sub MoveUp(ByVal i As Long)
+    If i < 1 Or m_Count < i Then Exit Sub
+    Me.Swap i - 1, i
+End Sub
+
+Public Sub MoveDown(ByVal i As Long)
+    If i < 0 Or (m_Count - 1) < i Then Exit Sub
+    Me.Swap i, i + 1
+End Sub
+
 '    If m_IsHashed Then
 '        Select Case m_DataType
 '        Case vbObject

@@ -4,7 +4,7 @@ Begin VB.Form Form1
    ClientHeight    =   7335
    ClientLeft      =   120
    ClientTop       =   465
-   ClientWidth     =   10935
+   ClientWidth     =   11910
    BeginProperty Font 
       Name            =   "Consolas"
       Size            =   9.75
@@ -17,8 +17,16 @@ Begin VB.Form Form1
    Icon            =   "Form1.frx":0000
    LinkTopic       =   "Form1"
    ScaleHeight     =   7335
-   ScaleWidth      =   10935
+   ScaleWidth      =   11910
    StartUpPosition =   3  'Windows-Standard
+   Begin VB.CommandButton BtnInfo 
+      Caption         =   "Info"
+      Height          =   375
+      Left            =   2640
+      TabIndex        =   33
+      Top             =   120
+      Width           =   855
+   End
    Begin VB.CommandButton BtnTestvbWChar 
       Caption         =   "Test vbWChar"
       Height          =   375
@@ -211,7 +219,7 @@ Begin VB.Form Form1
       Left            =   120
       TabIndex        =   2
       Top             =   120
-      Width           =   3375
+      Width           =   2535
    End
    Begin VB.ComboBox CmbDataType 
       Height          =   345
@@ -294,6 +302,10 @@ Attribute VB_Exposed = False
 Option Explicit
 Dim m_List As List
 Dim m_ListClone As List
+
+Private Sub BtnInfo_Click()
+    MsgBox App.CompanyName & " " & App.EXEName & " v" & App.Major & "." & App.Minor & "." & App.Revision & vbCrLf & App.FileDescription, vbInformation Or vbOKOnly
+End Sub
 
 Private Sub Form_Load()
     'Set m_List = New List
@@ -597,7 +609,8 @@ End Sub
 Private Sub BtnMoveUp_Click()
     Dim i As Long: i = List1.ListIndex
     If Not (0 < i And i < m_List.Count) Then Exit Sub
-    m_List.Swap i, i - 1
+    'm_List.Swap i, i - 1
+    m_List.MoveUp i
     UpdateView
     List1.ListIndex = i - 1
 End Sub
@@ -606,7 +619,8 @@ Private Sub BtnMoveDown_Click()
     'If i < 0 Then Exit Sub
     'If i >= (m_List.Count - 1) Then Exit Sub
     If Not (0 <= i And i < m_List.Count - 1) Then Exit Sub
-    m_List.Swap i, i + 1
+    'm_List.Swap i, i + 1
+    m_List.MoveDown i
     UpdateView
     List1.ListIndex = i + 1
 End Sub
