@@ -232,7 +232,9 @@ End Function
 Public Function Add(avar)
     ' Fügt am Ende der Liste ein Objekt hinzu
     If IsMissing(avar) Then Exit Function
-    If m_DataType = vbEmpty Then
+    
+    'If m_DataType = vbEmpty Or m_DataType = vbUserDefinedType Then
+    If m_DataType = vbUserDefinedType And m_bytLen = 0 Then
         'Dreckmist, bei einem default-Property wird nur der Typ des Default props ermittelt
         'when Object has default prop get the type in another way, better directly from reading the variant
         Dim dt As EDataType: dt = VarType(avar)
