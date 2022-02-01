@@ -70,6 +70,7 @@ Dim m_GrowSize As Long   'chunksize
 Dim m_bytLen   As Long   'die Länge eines Elements in Bytes
 Dim m_Count    As Long
 Dim m_IsPtr    As Boolean
+Dim m_Index    As Long 'works as ListIndex for a selected item
 
 Dim m_IsHashed As Boolean
 Dim m_HashI    As Collection
@@ -85,6 +86,7 @@ Private Sub Class_Initialize()
     'm_Capacity = 32
     'm_GrowRate = 2
     'ReDim m_Arr(0 To m_Capacity - 1)
+    m_Index = -1
 End Sub
 
 Private Sub Class_Terminate()
@@ -122,9 +124,9 @@ Friend Sub NewC(other As List)
     End With
 End Sub
 
-Private Sub InitGenericArray(t As EDataType)
+Private Sub InitGenericArray(T As EDataType)
     Dim u As Long: u = m_Capacity + 1
-    Select Case t
+    Select Case T
     Case vbInteger:    ReDim m_Arr(0 To u) As Integer:   m_bytLen = 2
     Case vbLong:       ReDim m_Arr(0 To u) As Long:      m_bytLen = 4
     Case vbSingle:     ReDim m_Arr(0 To u) As Single:    m_bytLen = 4
@@ -149,7 +151,7 @@ Private Sub InitGenericArray(t As EDataType)
     'wait for Add
     'Case vbArray:
     Case Else 'Fehlermeldung ausgeben
-        MsgBox "Datentyp wird nicht unterstützt: " & EDataType_ToStr(t)
+        MsgBox "Datentyp wird nicht unterstützt: " & EDataType_ToStr(T)
     End Select
 End Sub
 
@@ -183,9 +185,9 @@ Friend Function GetType() As String
 End Function
 
 'Siehe auch Extra Projekt in der diese Funktion ausgiebig getestet wird
-Private Function EDataType_ToStr(t As EDataType) As String
+Private Function EDataType_ToStr(T As EDataType) As String
     Dim s As String
-    Select Case t
+    Select Case T
     Case vbInteger:    s = "Integer"    ' vbInteger    = 2
     Case vbLong:       s = "Long"       ' vbLong       = 3
     Case vbSingle:     s = "Single"     ' vbSingle     = 4
@@ -204,8 +206,8 @@ Private Function EDataType_ToStr(t As EDataType) As String
     Case vbWChar:      s = "WChar"
     'Case vbArray:      s = "Array"      ' vbArray      = 8192 (&H2000)
     Case Else:
-        If t And vbByRef Then s = "ByRef "
-        If t And vbArray Then s = "Array As "
+        If T And vbByRef Then s = "ByRef "
+        If T And vbArray Then s = "Array As " Else s = "Type still undefined"
     End Select
     EDataType_ToStr = s
 End Function
@@ -231,6 +233,7 @@ End Function
 
 Public Function Add(avar)
     ' Fügt am Ende der Liste ein Objekt hinzu
+Try: On Error GoTo Catch
     If IsMissing(avar) Then Exit Function
     
     'If m_DataType = vbEmpty Or m_DataType = vbUserDefinedType Then
@@ -264,6 +267,9 @@ Public Function Add(avar)
         End If
     End If
     m_Count = m_Count + 1
+    Exit Function
+Catch:
+    ErrHandler "Add", "typ: " & EDataType_ToStr(m_DataType) & vbCrLf & "count: " & m_Count & vbCrLf & "tn: " & TypeName(avar)
 End Function
 Private Function KeyFromVar(avar) As String
     Dim k As String
@@ -292,7 +298,7 @@ Private Function KeyFromVar(avar) As String
 End Function
 Private Function HashAddKey(aKey As String, Index As Long) As Boolean
     If Len(aKey) Then
-        If Contains(aKey) Then Exit Function
+        If ContainsKey(aKey) Then Exit Function
         'den Index mit dem Key integrieren?
         m_HashI.Add aKey & vbNullChar & CStr(Index), aKey
     End If
@@ -360,16 +366,16 @@ Public Sub AddRange(aArr) 'As List
             'für String
             If VarType(aArr) = vbString Then
                 Dim bl As Long: bl = LenB(aArr)
-                Dim l As Long: l = bl / 2
+                Dim L As Long: L = bl / 2
                 If m_IsHashed Then
-                    For i = 1 To l
+                    For i = 1 To L
                         Me.Add AscW(Mid$(aArr, i, 1))
                     Next
                 Else
-                    EnsureCapacity m_Count + l
+                    EnsureCapacity m_Count + L
                     Dim pDst As Long: pDst = DataPtrI(m_Count)
                     RtlMoveMemory ByVal pDst, ByVal StrPtr(aArr), bl
-                    m_Count = m_Count + l
+                    m_Count = m_Count + L
                 End If
             End If
         ElseIf m_DataType = vbUserDefinedType Then
@@ -416,23 +422,68 @@ Public Function Clone() As List
     Set Clone = New List: Clone.NewC Me
 End Function
 
-Public Function Contains(Key As String) As Boolean
+Public Function ContainsEqualObj(obj As Object) As Boolean
+    Dim i As Long
+    For i = 0 To m_Count - 1
+        If m_Arr(i).Equals(obj) Then
+            ContainsEqualObj = True: Exit Function
+        End If
+    Next
+End Function
+
+Public Function ContainsKey(Key As String) As Boolean
     'Bestimmt, ob sich ein Element in der Liste befindet.
     On Error Resume Next
     If m_IsHashed Then
         If VBA.Information.IsEmpty(m_HashI(Key)) Then: 'DoNothing
-        Contains = (Err.Number = 0)
+        ContainsKey = (Err.Number = 0)
     Else
         Dim i As Long
         If m_DataType = vbObject Then
             For i = 0 To m_Count - 1
-                If m_Arr(i).Key = Key Then Contains = True: Exit Function
+                If m_Arr(i).Key = Key Then ContainsKey = True: Exit Function
             Next
         Else
             For i = 0 To m_Count - 1
-                If CStr(m_Arr(i)) = Key Then Contains = True: Exit Function
+                If CStr(m_Arr(i)) = Key Then ContainsKey = True: Exit Function
             Next
         End If
+    End If
+    On Error GoTo 0
+End Function
+
+Public Function ContainsObj(obj, Optional ByVal ObjUseKey As Boolean = False) As Boolean
+    'Bestimmt, ob sich ein Element in der Liste befindet.
+    On Error Resume Next
+    Dim Key As String
+    If m_IsHashed Then
+        If m_DataType = vbObject Then Key = obj.Key Else Key = obj
+        If VBA.IsEmpty(m_HashI(Key)) Then: 'DoNothing
+        ContainsObj = (Err.Number = 0)
+    Else
+        Dim i As Long
+        Select Case m_DataType
+        Case vbObject
+            'entweder über Key oder über Gleichheit der Objekte
+            If ObjUseKey Then
+                For i = 0 To m_Count - 1
+                    If m_Arr(i).Key = Key Then ContainsObj = True: Exit Function
+                Next
+            Else
+                Dim pObj As Long: pObj = ObjPtr(obj)
+                For i = 0 To m_Count - 1
+                    If ObjPtr(m_Arr(i)) = pObj Then ContainsObj = True: Exit Function
+                Next
+            End If
+        Case vbUserDefinedType
+            'hier eine funktion aufrufen die zwei udts miteinander vergleicht
+        Case Else
+            'Key = Obj
+            For i = 0 To m_Count - 1
+                'If CStr(m_Arr(i)) = Key Then Contains = True: Exit Function
+                If m_Arr(i) = obj Then ContainsObj = True: Exit Function
+            Next
+        End Select
     End If
     On Error GoTo 0
 End Function
@@ -476,10 +527,12 @@ Public Property Let Item(ByVal Index As Long, avar)
     Case Else:      m_Arr(Index) = avar
     End Select
 End Property
+
 Public Property Set Item(ByVal Index As Long, avar)
     If m_Count <= Index Then Exit Property
     Set m_Arr(Index) = avar
 End Property
+
 Public Property Get Item(ByVal Index As Long)
 Attribute Item.VB_UserMemId = 0
     'Standard-Property
@@ -511,7 +564,7 @@ End Property
 Public Property Get ItemByName(aName As String)
     'liefert das Element mit dem angegebenen Namen, nur mit IsHashed = True
     If Not m_IsHashed Then Exit Property
-    If Contains(aName) Then
+    If ContainsKey(aName) Then
         Dim i As Long: i = m_HashI(aName)
         Select Case m_DataType
         Case vbObject:  Set ItemByName = m_Arr(i)
@@ -520,30 +573,66 @@ Public Property Get ItemByName(aName As String)
         End Select
     End If
 End Property
-Public Property Get IndexOf(aName As String) As Long
-    'm_HashI.Add Key & vbNullChar & CStr(m_Count), Key
-    
-    'liefert den Index des ersten Vorkommens eines Elements mit dem angegebenen Namen
-    Dim i As Long
+
+Public Property Get IndexOf(Value) As Long
+    Dim i As Long, obj As Object
+    IndexOf = -1 'first we assume its not in list
     If m_IsHashed Then
-        If Contains(aName) Then
-            Dim ki As String: ki = m_HashI(aName)
+        Dim Key As String
+        Select Case m_DataType
+        Case vbObject: Set obj = Value: Key = obj.Key
+        Case vbString: Key = Value
+        Case Else:     Key = Value
+        End Select
+        If ContainsKey(Key) Then
+            Dim ki As String: ki = m_HashI(Key)
             IndexOf = Split(ki, vbNullChar)(1)
         End If
     Else
         Select Case m_DataType
-        Case vbObject:  For i = 0 To m_Count - 1
-                            If aName = m_Arr(i).Name Then IndexOf = i: Exit Property
+        Case vbObject:  'Set obj = Value: Dim pObj As Long: pObj = ObjPtr(obj)
+                        'For i = 0 To m_Count - 1
+                        '    If ObjPtr(m_Arr(i)) = pObj Then IndexOf = i: Exit Property
+                        'Next
+                        'Nein nicht ObjPtr sondern Equals verwenden
+                        For i = 0 To m_Count - 1
+                            If m_Arr(i).Equals(Value) Then IndexOf = i: Exit Property
                         Next
+                        
         Case vbString:  For i = 0 To m_Count - 1
-                            If aName = m_Arr(i) Then IndexOf = i: Exit Property
+                            If m_Arr(i) = Value Then IndexOf = i: Exit Property
                         Next
         Case Else:      For i = 0 To m_Count - 1
-                            If aName = m_Arr(i) Then IndexOf = i: Exit Property
+                            If m_Arr(i) = Value Then IndexOf = i: Exit Property
                         Next
         End Select
     End If
 End Property
+
+'Public Property Get IndexOf(aName As String) As Long
+'    'm_HashI.Add Key & vbNullChar & CStr(m_Count), Key
+'
+'    'liefert den Index des ersten Vorkommens eines Elements mit dem angegebenen Namen
+'    Dim i As Long
+'    If m_IsHashed Then
+'        If Contains(aName) Then
+'            Dim ki As String: ki = m_HashI(aName)
+'            IndexOf = Split(ki, vbNullChar)(1)
+'        End If
+'    Else
+'        Select Case m_DataType
+'        Case vbObject:  For i = 0 To m_Count - 1
+'                            If aName = m_Arr(i).Name Then IndexOf = i: Exit Property
+'                        Next
+'        Case vbString:  For i = 0 To m_Count - 1
+'                            If aName = m_Arr(i) Then IndexOf = i: Exit Property
+'                        Next
+'        Case Else:      For i = 0 To m_Count - 1
+'                            If aName = m_Arr(i) Then IndexOf = i: Exit Property
+'                        Next
+'        End Select
+'    End If
+'End Property
 
 
 '    If m_IsHashed Then
@@ -660,6 +749,13 @@ Public Property Get ByteLength() As Long
     ByteLength = m_bytLen * (UUBound + 1)
 End Property
 
+Public Property Let ListIndex(ByVal Value As Long)
+    m_Index = Value
+End Property
+Public Property Get ListIndex() As Long
+    ListIndex = m_Index
+End Property
+
 ' Dim s As New Stack(Of String)
 ' s.Push ("Dings")   ' Fügt ein Objekt am Anfang des Stack(Of T) ein.
 ' s.Peek()           ' Gibt das Objekt am Anfang des Stack(Of T) zurück, ohne es zu entfernen.
@@ -727,7 +823,7 @@ End Function
 Public Sub Insert(ByVal Index As Long, avar)
     If m_IsHashed Then
         'zuerst überprüfen ob schon ein ELement da ist
-        If Contains(KeyFromVar(avar)) Then Exit Sub
+        If ContainsKey(KeyFromVar(avar)) Then Exit Sub
     End If
     'If Index < 0 Then Exit Sub
     'If m_Count <= Index Then Exit Sub
@@ -776,6 +872,13 @@ Public Sub Remove(ByVal Index As Long)
     'Mist was machen bei Hashes?
     'egal, dann einfach neu machen
     If m_IsHashed Then ReInitIndices
+End Sub
+
+Public Sub RemoveObj(obj As Object)
+    Dim i As Long: i = IndexOf(obj)
+    'blöd, IndexOf muss natürlich -1 zurückgeben falls nicht drin
+    If i < 0 Then Exit Sub
+    Remove i
 End Sub
 
 Public Sub RemoveFirst()
@@ -914,11 +1017,11 @@ End Sub
 
 ' Die Rekursive datenunabhängige Methode QuickSort
 Private Sub QuickSortVar(ByVal i1 As Long, ByVal i2 As Long)
-    Dim t As Long
+    Dim T As Long
     If i2 > i1 Then
-        t = divideVar(i1, i2)
-        Call QuickSortVar(i1, t - 1)
-        Call QuickSortVar(t + 1, i2)
+        T = divideVar(i1, i2)
+        Call QuickSortVar(i1, T - 1)
+        Call QuickSortVar(T + 1, i2)
     End If
 End Sub
 Private Function divideVar(ByVal i1 As Long, ByVal i2 As Long) As Long
@@ -947,11 +1050,11 @@ End Sub
 
 ' Die Rekursive datenunabhängige Methode QuickSort
 Private Sub QuickSortStr(ByVal i1 As Long, ByVal i2 As Long)
-    Dim t As Long
+    Dim T As Long
     If i2 > i1 Then
-        t = divideStr(i1, i2)
-        Call QuickSortStr(i1, t - 1)
-        Call QuickSortStr(t + 1, i2)
+        T = divideStr(i1, i2)
+        Call QuickSortStr(i1, T - 1)
+        Call QuickSortStr(T + 1, i2)
     End If
 End Sub
 Private Function divideStr(ByVal i1 As Long, ByVal i2 As Long) As Long
@@ -980,11 +1083,11 @@ End Sub
 
 ' Die Rekursive datenunabhängige Methode QuickSort
 Private Sub QuickSortObj(ByVal i1 As Long, ByVal i2 As Long)
-    Dim t As Long
+    Dim T As Long
     If i2 > i1 Then
-        t = divideObj(i1, i2)
-        Call QuickSortObj(i1, t - 1)
-        Call QuickSortObj(t + 1, i2)
+        T = divideObj(i1, i2)
+        Call QuickSortObj(i1, T - 1)
+        Call QuickSortObj(T + 1, i2)
     End If
 End Sub
 Private Function divideObj(ByVal i1 As Long, ByVal i2 As Long) As Long
@@ -1039,11 +1142,18 @@ Private Sub priv_Reverse()
     End If
 End Sub
 
-Public Sub ToListbox(aLB As ListBox)
+Public Sub ToListbox(aLBorCB, Optional ByVal UseListIndex As Boolean = False)
+'ToListbox Me.LstPerson, True
     Dim i As Long
+    aLBorCB.Clear
     For i = 0 To m_Count - 1
-        aLB.AddItem ItemToStr(i)
+        aLBorCB.AddItem ItemToStr(i)
     Next
+    'besser m_index zu 0 setzen
+    If 0 < m_Count And m_Index < 0 Then m_Index = 0
+    If UseListIndex And (m_Index >= 0) Then
+        aLBorCB.ListIndex = m_Index
+    End If
 End Sub
 Public Function ToArray()
     Dim Arr: Arr = m_Arr
@@ -1486,9 +1596,9 @@ End Function
 Public Function AAny()
     '
 End Function
-Public Function CContains()
+'Public Function CContains()
     '
-End Function
+'End Function
 Public Function SequenceEqual()
     '
 End Function
@@ -1636,3 +1746,27 @@ End Function
 '   Empty, Range, Repeat
 '
 'Sum: 51
+
+'copy this same function to every class, form or module
+'the name of the class or form will be added automatically
+'in standard-modules the function "TypeName(Me)" will not work, so simply replace it with the name of the Module
+' v ############################## v '   Local ErrHandler   ' v ############################## v '
+Private Function ErrHandler(ByVal FuncName As String, _
+                            Optional AddInfo As String, _
+                            Optional WinApiError, _
+                            Optional bLoud As Boolean = True, _
+                            Optional bErrLog As Boolean = True, _
+                            Optional vbDecor As VbMsgBoxStyle = vbOKOnly, _
+                            Optional bRetry As Boolean) As VbMsgBoxResult
+
+    If bRetry Then
+
+        ErrHandler = MessErrorRetry(TypeName(Me), FuncName, AddInfo, WinApiError, bErrLog)
+
+    Else
+
+        ErrHandler = MessError(TypeName(Me), FuncName, AddInfo, WinApiError, bLoud, bErrLog, vbDecor)
+
+    End If
+
+End Function
