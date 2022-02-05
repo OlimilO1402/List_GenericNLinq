@@ -422,10 +422,10 @@ Public Function Clone() As List
     Set Clone = New List: Clone.NewC Me
 End Function
 
-Public Function ContainsEqualObj(obj As Object) As Boolean
+Public Function ContainsEqualObj(Obj As Object) As Boolean
     Dim i As Long
     For i = 0 To m_Count - 1
-        If m_Arr(i).Equals(obj) Then
+        If m_Arr(i).Equals(Obj) Then
             ContainsEqualObj = True: Exit Function
         End If
     Next
@@ -452,12 +452,12 @@ Public Function ContainsKey(Key As String) As Boolean
     On Error GoTo 0
 End Function
 
-Public Function ContainsObj(obj, Optional ByVal ObjUseKey As Boolean = False) As Boolean
+Public Function ContainsObj(Obj, Optional ByVal ObjUseKey As Boolean = False) As Boolean
     'Bestimmt, ob sich ein Element in der Liste befindet.
     On Error Resume Next
     Dim Key As String
     If m_IsHashed Then
-        If m_DataType = vbObject Then Key = obj.Key Else Key = obj
+        If m_DataType = vbObject Then Key = Obj.Key Else Key = Obj
         If VBA.IsEmpty(m_HashI(Key)) Then: 'DoNothing
         ContainsObj = (Err.Number = 0)
     Else
@@ -470,7 +470,7 @@ Public Function ContainsObj(obj, Optional ByVal ObjUseKey As Boolean = False) As
                     If m_Arr(i).Key = Key Then ContainsObj = True: Exit Function
                 Next
             Else
-                Dim pObj As Long: pObj = ObjPtr(obj)
+                Dim pObj As Long: pObj = ObjPtr(Obj)
                 For i = 0 To m_Count - 1
                     If ObjPtr(m_Arr(i)) = pObj Then ContainsObj = True: Exit Function
                 Next
@@ -481,7 +481,7 @@ Public Function ContainsObj(obj, Optional ByVal ObjUseKey As Boolean = False) As
             'Key = Obj
             For i = 0 To m_Count - 1
                 'If CStr(m_Arr(i)) = Key Then Contains = True: Exit Function
-                If m_Arr(i) = obj Then ContainsObj = True: Exit Function
+                If m_Arr(i) = Obj Then ContainsObj = True: Exit Function
             Next
         End Select
     End If
@@ -497,8 +497,11 @@ Public Function GetEnumerator() 'As Variant ' 'As IUnknown
 Attribute GetEnumerator.VB_UserMemId = -4
     'Prozedur-ID = -4
     'Gibt einen Enumerator zurück, der die Liste durchläuft
+    'this is the simple Enumerator crated by VB so we have to crop the array to its used size
     Me.Trim
-    GetEnumerator = m_Arr 'm_Arr() '.[_NewEnum]
+    'cropping the array after every add is stupid if you want to view the array after every change
+    'if we do not want to crop the array, we have to implement our own Enumerator, where we set the size manually
+    GetEnumerator = m_Arr '() 'm_Arr() '.[_NewEnum]
 End Function
 
 Public Property Get UUBound() As Long
@@ -561,26 +564,27 @@ Public Property Get ItemToStr(ByVal Index As Long) As String
     ItemToStr = s
 End Property
 
-Public Property Get ItemByName(aName As String)
+Public Property Get ItemByKey(aKey As String)
     'liefert das Element mit dem angegebenen Namen, nur mit IsHashed = True
     If Not m_IsHashed Then Exit Property
-    If ContainsKey(aName) Then
-        Dim i As Long: i = m_HashI(aName)
+    If ContainsKey(aKey) Then
+        Dim s As String: s = m_HashI(aKey)
+        Dim i As Long: i = Split(s, vbNullChar)(1)
         Select Case m_DataType
-        Case vbObject:  Set ItemByName = m_Arr(i)
-        Case vbVariant: If IsObject(m_Arr(i)) Then Set ItemByName = m_Arr(i)
-        Case Else:      ItemByName = m_Arr(i)
+        Case vbObject:  Set ItemByKey = m_Arr(i)
+        Case vbVariant: If IsObject(m_Arr(i)) Then Set ItemByKey = m_Arr(i) Else ItemByKey = m_Arr(i)
+        Case Else:      ItemByKey = m_Arr(i)
         End Select
     End If
 End Property
 
 Public Property Get IndexOf(Value) As Long
-    Dim i As Long, obj As Object
+    Dim i As Long, Obj As Object
     IndexOf = -1 'first we assume its not in list
     If m_IsHashed Then
         Dim Key As String
         Select Case m_DataType
-        Case vbObject: Set obj = Value: Key = obj.Key
+        Case vbObject: Set Obj = Value: Key = Obj.Key
         Case vbString: Key = Value
         Case Else:     Key = Value
         End Select
@@ -874,8 +878,8 @@ Public Sub Remove(ByVal Index As Long)
     If m_IsHashed Then ReInitIndices
 End Sub
 
-Public Sub RemoveObj(obj As Object)
-    Dim i As Long: i = IndexOf(obj)
+Public Sub RemoveObj(Obj As Object)
+    Dim i As Long: i = IndexOf(Obj)
     'blöd, IndexOf muss natürlich -1 zurückgeben falls nicht drin
     If i < 0 Then Exit Sub
     Remove i
@@ -1756,7 +1760,7 @@ Private Function ErrHandler(ByVal FuncName As String, _
                             Optional WinApiError, _
                             Optional bLoud As Boolean = True, _
                             Optional bErrLog As Boolean = True, _
-                            Optional vbDecor As VbMsgBoxStyle = vbOKOnly, _
+                            Optional vbDecor As VbMsgBoxStyle = vbOKCancel, _
                             Optional bRetry As Boolean) As VbMsgBoxResult
 
     If bRetry Then

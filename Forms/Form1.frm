@@ -19,6 +19,14 @@ Begin VB.Form Form1
    ScaleHeight     =   7335
    ScaleWidth      =   11910
    StartUpPosition =   3  'Windows-Standard
+   Begin VB.CommandButton Command1 
+      Caption         =   "Test For Each"
+      Height          =   375
+      Left            =   120
+      TabIndex        =   34
+      Top             =   5520
+      Width           =   1575
+   End
    Begin VB.CommandButton BtnInfo 
       Caption         =   "Info"
       Height          =   375
@@ -305,6 +313,14 @@ Dim m_ListClone As List
 
 Private Sub BtnInfo_Click()
     MsgBox App.CompanyName & " " & App.EXEName & " v" & App.Major & "." & App.Minor & "." & App.Revision & vbCrLf & App.FileDescription, vbInformation Or vbOKOnly
+End Sub
+
+Private Sub Command1_Click()
+    List1.Clear
+    Dim v
+    For Each v In m_List.GetEnumerator
+        List1.AddItem v
+    Next
 End Sub
 
 Private Sub Form_Load()
@@ -671,17 +687,17 @@ End Sub
 
 Sub List2Show(bShow As Boolean)
     Dim brdr As Single: brdr = 8 * Screen.TwipsPerPixelX
-    Dim l As Single: l = List1.Left
+    Dim L As Single: L = List1.Left
     Dim t As Single: t = List1.Top
     Dim W As Single: W = List1.Width
     Dim H As Single: H = List1.Height
     If bShow Then
-        l = l + brdr + W
+        L = L + brdr + W
         List2.ZOrder 0
     Else
         List1.ZOrder 0
     End If
-    If W > 0 And H > 0 Then List2.Move l, t, W, H
+    If W > 0 And H > 0 Then List2.Move L, t, W, H
 End Sub
 Private Sub BtnBack_Click()
     Set m_ListClone = Nothing
@@ -692,18 +708,18 @@ End Sub
 
 Private Sub Form_Resize()
     Dim brdr As Single: brdr = 8 * Screen.TwipsPerPixelX
-    Dim l As Single: l = List1.Left
+    Dim L As Single: L = List1.Left
     Dim t As Single: t = List1.Top
     Dim W As Single: W = List1.Width
     Dim H As Single: H = Me.ScaleHeight - List1.Top - brdr
     If W > 0 And H > 0 Then
-        List1.Move l, t, W, H
-        List2.Move l, t, W, H
+        List1.Move L, t, W, H
+        List2.Move L, t, W, H
     End If
     If BtnBack.Enabled Then
-        l = l + W + brdr
+        L = L + W + brdr
         'W = L + W + 8 * Screen.TwipsPerPixelX
-        If W > 0 And H > 0 Then List2.Move l, t, W, H
+        If W > 0 And H > 0 Then List2.Move L, t, W, H
     End If
 End Sub
 
