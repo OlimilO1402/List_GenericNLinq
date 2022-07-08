@@ -132,6 +132,10 @@ Private Sub InitGenericArray(T As EDataType)
     Case vbSingle:     ReDim m_Arr(0 To u) As Single:    m_bytLen = 4
     Case vbDouble:     ReDim m_Arr(0 To u) As Double:    m_bytLen = 8
     Case vbCurrency:   ReDim m_Arr(0 To u) As Currency:  m_bytLen = 8
+    
+    
+    
+    
     Case vbDate:       ReDim m_Arr(0 To u) As Date:      m_bytLen = 8
     Case vbString:     ReDim m_Arr(0 To u) As String:    m_bytLen = 4
     Case vbObject:     ReDim m_Arr(0 To u) As Object:    m_bytLen = 4
@@ -235,6 +239,10 @@ Public Function Add(avar)
     ' Fügt am Ende der Liste ein Objekt hinzu
 Try: On Error GoTo Catch
     If IsMissing(avar) Then Exit Function
+    If m_DataType = 0 Then
+        'hier letzter Anker falls Typ noch nicht gesetzt
+        New_ VarType(avar)
+    End If
     
     'If m_DataType = vbEmpty Or m_DataType = vbUserDefinedType Then
     If m_DataType = vbUserDefinedType And m_bytLen = 0 Then
@@ -497,7 +505,7 @@ Public Function GetEnumerator() 'As Variant ' 'As IUnknown
 Attribute GetEnumerator.VB_UserMemId = -4
     'Prozedur-ID = -4
     'Gibt einen Enumerator zurück, der die Liste durchläuft
-    'this is the simple Enumerator crated by VB so we have to crop the array to its used size
+    'this is the simple Enumerator created by VB so we have to crop the array to its used size
     Me.Trim
     'cropping the array after every add is stupid if you want to view the array after every change
     'if we do not want to crop the array, we have to implement our own Enumerator, where we set the size manually
@@ -569,7 +577,7 @@ Public Property Get ItemByKey(aKey As String)
     If Not m_IsHashed Then Exit Property
     If ContainsKey(aKey) Then
         Dim s As String: s = m_HashI(aKey)
-        Dim i As Long: i = Split(s, vbNullChar)(1)
+        Dim i As Long:   i = Split(s, vbNullChar)(1)
         Select Case m_DataType
         Case vbObject:  Set ItemByKey = m_Arr(i)
         Case vbVariant: If IsObject(m_Arr(i)) Then Set ItemByKey = m_Arr(i) Else ItemByKey = m_Arr(i)

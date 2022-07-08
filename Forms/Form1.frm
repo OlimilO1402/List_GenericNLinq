@@ -19,7 +19,7 @@ Begin VB.Form Form1
    ScaleHeight     =   7335
    ScaleWidth      =   11910
    StartUpPosition =   3  'Windows-Standard
-   Begin VB.CommandButton Command1 
+   Begin VB.CommandButton BtnTestForEach 
       Caption         =   "Test For Each"
       Height          =   375
       Left            =   120
@@ -315,12 +315,21 @@ Private Sub BtnInfo_Click()
     MsgBox App.CompanyName & " " & App.EXEName & " v" & App.Major & "." & App.Minor & "." & App.Revision & vbCrLf & App.FileDescription, vbInformation Or vbOKOnly
 End Sub
 
-Private Sub Command1_Click()
+Private Sub BtnTestForEach_Click()
+    MsgBox "Clearing the listbox"
     List1.Clear
-    Dim v
-    For Each v In m_List.GetEnumerator
-        List1.AddItem v
-    Next
+    MsgBox "Running through the list by using For Each and filling the listbox again."
+    Dim v, o As Object
+    If m_List.DataType = vbObject Then
+        For Each v In m_List.GetEnumerator
+            Set o = v
+            List1.AddItem o.ToStr
+        Next
+    Else
+        For Each v In m_List.GetEnumerator
+            List1.AddItem v
+        Next
+    End If
 End Sub
 
 Private Sub Form_Load()
@@ -387,6 +396,13 @@ Private Sub BtnCreate_Click()
     EnableCtrls True
     AddRandom Count
     List1.Clear
+    
+'    If Len(CmbDataType.Text) = 0 Then CmbDataType.Text = m_List.GetType
+'    If Len(CmbIsHashed.Text) = 0 Then CmbIsHashed.Text = m_List.IsHashed
+'    If Len(TxtCount.Text) = 0 Then TxtCount.Text = m_List.Count
+'    If Len(TxtCapacity.Text) = 0 Then TxtCapacity.Text = m_List.Capacity
+'    If Len(TxtGrowRate.Text) = 0 Then TxtGrowRate.Text = m_List.GrowRate
+'    If Len(TxtGrowSize.Text) = 0 Then TxtGrowSize.Text = m_List.GrowSize
     
     If Count < 50000 Then
         UpdateView
@@ -688,7 +704,7 @@ End Sub
 Sub List2Show(bShow As Boolean)
     Dim brdr As Single: brdr = 8 * Screen.TwipsPerPixelX
     Dim L As Single: L = List1.Left
-    Dim t As Single: t = List1.Top
+    Dim T As Single: T = List1.Top
     Dim W As Single: W = List1.Width
     Dim H As Single: H = List1.Height
     If bShow Then
@@ -697,7 +713,7 @@ Sub List2Show(bShow As Boolean)
     Else
         List1.ZOrder 0
     End If
-    If W > 0 And H > 0 Then List2.Move L, t, W, H
+    If W > 0 And H > 0 Then List2.Move L, T, W, H
 End Sub
 Private Sub BtnBack_Click()
     Set m_ListClone = Nothing
@@ -709,17 +725,17 @@ End Sub
 Private Sub Form_Resize()
     Dim brdr As Single: brdr = 8 * Screen.TwipsPerPixelX
     Dim L As Single: L = List1.Left
-    Dim t As Single: t = List1.Top
+    Dim T As Single: T = List1.Top
     Dim W As Single: W = List1.Width
     Dim H As Single: H = Me.ScaleHeight - List1.Top - brdr
     If W > 0 And H > 0 Then
-        List1.Move L, t, W, H
-        List2.Move L, t, W, H
+        List1.Move L, T, W, H
+        List2.Move L, T, W, H
     End If
     If BtnBack.Enabled Then
         L = L + W + brdr
         'W = L + W + 8 * Screen.TwipsPerPixelX
-        If W > 0 And H > 0 Then List2.Move L, t, W, H
+        If W > 0 And H > 0 Then List2.Move L, T, W, H
     End If
 End Sub
 
