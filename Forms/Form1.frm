@@ -592,11 +592,17 @@ Try: On Error GoTo Catch
                     If VarType(m_List.Item(i)) = vbObject Then
                         Set v = m_List.Item(i)
                         s = v.ToStr
+                    Else
+                        s = m_List.Item(i)
                     End If
     Case Else:      s = m_List.Item(i)
     End Select
     s = InputBox("Index: " & i, "Element editieren: ", s)
     If s = vbNullString Then Exit Sub
+    
+    
+    
+    
     m_List.Item(i) = s
     
     'List1.List(i) = s
@@ -704,7 +710,7 @@ End Sub
 Sub List2Show(bShow As Boolean)
     Dim brdr As Single: brdr = 8 * Screen.TwipsPerPixelX
     Dim L As Single: L = List1.Left
-    Dim T As Single: T = List1.Top
+    Dim t As Single: t = List1.Top
     Dim W As Single: W = List1.Width
     Dim H As Single: H = List1.Height
     If bShow Then
@@ -713,7 +719,7 @@ Sub List2Show(bShow As Boolean)
     Else
         List1.ZOrder 0
     End If
-    If W > 0 And H > 0 Then List2.Move L, T, W, H
+    If W > 0 And H > 0 Then List2.Move L, t, W, H
 End Sub
 Private Sub BtnBack_Click()
     Set m_ListClone = Nothing
@@ -725,17 +731,17 @@ End Sub
 Private Sub Form_Resize()
     Dim brdr As Single: brdr = 8 * Screen.TwipsPerPixelX
     Dim L As Single: L = List1.Left
-    Dim T As Single: T = List1.Top
+    Dim t As Single: t = List1.Top
     Dim W As Single: W = List1.Width
     Dim H As Single: H = Me.ScaleHeight - List1.Top - brdr
     If W > 0 And H > 0 Then
-        List1.Move L, T, W, H
-        List2.Move L, T, W, H
+        List1.Move L, t, W, H
+        List2.Move L, t, W, H
     End If
     If BtnBack.Enabled Then
         L = L + W + brdr
         'W = L + W + 8 * Screen.TwipsPerPixelX
-        If W > 0 And H > 0 Then List2.Move L, T, W, H
+        If W > 0 And H > 0 Then List2.Move L, t, W, H
     End If
 End Sub
 
