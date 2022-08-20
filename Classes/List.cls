@@ -12,7 +12,6 @@ Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
-
 'https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-oaut/3fe7db9f-5803-4dc4-9d14-5425d3f5461f
 ' typedef  enum tagVARENUM
 ' {
@@ -59,19 +58,19 @@ Public Enum EDataType 'Public Enum Extended VbVarType
 End Enum
 ' } VARENUM;
 'Class List
-'1432 Zeilen geballte Listen-Power für VB6, alles in einer Klasse.
-'Mit einem Hauch von Generics und LINQ
-'Funktionalität von Collection, List, Enumerable, Stack, Queue und Dictionary mehr braucht man nicht.
+'1795 lines of concentrated power of List for VB6, all in one Class, with a whiff of Generics and LINQ
+'This Class contains the functionality of Collection, List, Enumerable, Stack, Queue and Dictionary what else do you need.
 Dim m_Arr
 Dim m_DataType As EDataType
-Dim m_Capacity As Long '= 32
-Dim m_GrowRate As Single 'growfactor
-Dim m_GrowSize As Long   'chunksize
-Dim m_bytLen   As Long   'die Länge eines Elements in Bytes
+Dim m_Capacity As Long   '= 32
+Dim m_GrowRate As Single 'Growfactor
+Dim m_GrowSize As Long   'Chunksize
+Dim m_bytLen   As Long   'The length of one element in bytes
 Dim m_Count    As Long
 Dim m_IsPtr    As Boolean
-Dim m_Index    As Long 'works as ListIndex for a selected item
-
+Dim m_Index    As Long    'Works like ListIndex for a selected item
+Dim m_Version  As Variant 'Decimal 'Incremented in every Add, Insert or Delete
+Dim m_Name     As String
 Dim m_IsHashed As Boolean
 Dim m_HashI    As Collection
 'for lambdas: CallByName(m_LambObj, m_LambFunc)
@@ -117,6 +116,17 @@ Friend Sub New_(Of_T As EDataType, _
     If Not IsMissing(ArrColStrTypList) Then Me.AddRange ArrColStrTypList
 End Sub
 
+'in Module MNew:
+'Public Function List(Of_T As EDataType, _
+'                     Optional ArrColStrTypList, _
+'                     Optional ByVal IsHashed As Boolean = False, _
+'                     Optional ByVal Capacity As Long = 32, _
+'                     Optional ByVal GrowRate As Single = 2, _
+'                     Optional ByVal GrowSize As Long = 0) As List
+'    Set List = New List: List.New_ Of_T, ArrColStrTypList, IsHashed, Capacity, GrowRate, GrowSize
+'End Function
+
+'
 Friend Sub NewC(other As List)
     'Copy-Constructor wird von Clone aufgerufen
     With other
@@ -124,9 +134,9 @@ Friend Sub NewC(other As List)
     End With
 End Sub
 
-Private Sub InitGenericArray(T As EDataType)
+Private Sub InitGenericArray(t As EDataType)
     Dim u As Long: u = m_Capacity + 1
-    Select Case T
+    Select Case t
     Case vbInteger:    ReDim m_Arr(0 To u) As Integer:   m_bytLen = 2
     Case vbLong:       ReDim m_Arr(0 To u) As Long:      m_bytLen = 4
     Case vbSingle:     ReDim m_Arr(0 To u) As Single:    m_bytLen = 4
@@ -155,7 +165,7 @@ Private Sub InitGenericArray(T As EDataType)
     'wait for Add
     'Case vbArray:
     Case Else 'Fehlermeldung ausgeben
-        MsgBox "Datentyp wird nicht unterstützt: " & EDataType_ToStr(T)
+        MsgBox "Datentyp wird nicht unterstützt: " & EDataType_ToStr(t)
     End Select
 End Sub
 
@@ -189,9 +199,9 @@ Friend Function GetType() As String
 End Function
 
 'Siehe auch Extra Projekt in der diese Funktion ausgiebig getestet wird
-Private Function EDataType_ToStr(T As EDataType) As String
+Private Function EDataType_ToStr(t As EDataType) As String
     Dim s As String
-    Select Case T
+    Select Case t
     Case vbInteger:    s = "Integer"    ' vbInteger    = 2
     Case vbLong:       s = "Long"       ' vbLong       = 3
     Case vbSingle:     s = "Single"     ' vbSingle     = 4
@@ -210,8 +220,8 @@ Private Function EDataType_ToStr(T As EDataType) As String
     Case vbWChar:      s = "WChar"
     'Case vbArray:      s = "Array"      ' vbArray      = 8192 (&H2000)
     Case Else:
-        If T And vbByRef Then s = "ByRef "
-        If T And vbArray Then s = "Array As " Else s = "Type still undefined"
+        If t And vbByRef Then s = "ByRef "
+        If t And vbArray Then s = "Array As " Else s = "Type still undefined"
     End Select
     EDataType_ToStr = s
 End Function
@@ -275,6 +285,7 @@ Try: On Error GoTo Catch
         End If
     End If
     m_Count = m_Count + 1
+    m_Version = m_Version + CDec(1)
     Exit Function
 Catch:
     ErrHandler "Add", "typ: " & EDataType_ToStr(m_DataType) & vbCrLf & "count: " & m_Count & vbCrLf & "tn: " & TypeName(avar)
@@ -410,11 +421,10 @@ Public Property Let Capacity(ByVal Value As Long)
 End Property
 
 Public Sub Clear()
-    'Entfernt alle Elemente aus der List
-    'Oh shit, soll der Typ wirklich auch gelöscht werden?
-    'nein Oh nein am besten nicht!
-    'm_DataType = vbEmpty
+    'Removes/Deletes/Clears all elements from the List
+    'Nope Type will not be removed: 'm_DataType = vbEmpty
     m_Count = 0
+    m_Version = m_Version + CDec(1)
     'm_GrowRate = 0
     m_Capacity = 32
     'm_bytLen = 0
@@ -853,6 +863,7 @@ Public Sub Insert(ByVal Index As Long, avar)
         m_Arr(Index) = avar
     End If
     m_Count = m_Count + 1
+    m_Version = m_Version + CDec(1)
     If m_IsHashed Then
         ReInitIndices
     End If
@@ -881,6 +892,7 @@ Public Sub Remove(ByVal Index As Long)
     RtlZeroMemory ByVal pDst, m_bytLen
     RtlMoveMemory ByVal pDst, ByVal pSrc, BLen
     m_Count = m_Count - 1
+    m_Version = m_Version + CDec(1)
     'Mist was machen bei Hashes?
     'egal, dann einfach neu machen
     If m_IsHashed Then ReInitIndices
@@ -888,7 +900,7 @@ End Sub
 
 Public Sub RemoveObj(Obj As Object)
     Dim i As Long: i = IndexOf(Obj)
-    'blöd, IndexOf muss natürlich -1 zurückgeben falls nicht drin
+    'if Obj is not contained IndexOf returns -1
     If i < 0 Then Exit Sub
     Remove i
 End Sub
@@ -914,6 +926,7 @@ Public Sub RemoveLast()
         m_Arr(m_Count - 1) = 0
     End If
     m_Count = m_Count - 1
+    m_Version = m_Version + CDec(1)
 End Sub
 
 Public Sub MoveUp(ByVal i As Long)
@@ -980,6 +993,17 @@ Sub ReInitIndices()
     End Select
 End Sub
 
+Public Property Let Name(ByVal Value As String)
+    m_Name = Value
+End Property
+Public Property Get Name() As String
+    Name = m_Name
+End Property
+
+Public Property Get Version() As Variant 'As Decimal
+    Version = m_Version
+End Property
+
 Public Sub Sort(Optional ComparerObj As Object, Optional lambdaFunc As String)
 'Sub List(Of T).Sort()
 'Sub List(Of T).Sort(comparison As Comparison(Of T)
@@ -1029,11 +1053,11 @@ End Sub
 
 ' Die Rekursive datenunabhängige Methode QuickSort
 Private Sub QuickSortVar(ByVal i1 As Long, ByVal i2 As Long)
-    Dim T As Long
+    Dim t As Long
     If i2 > i1 Then
-        T = divideVar(i1, i2)
-        Call QuickSortVar(i1, T - 1)
-        Call QuickSortVar(T + 1, i2)
+        t = divideVar(i1, i2)
+        Call QuickSortVar(i1, t - 1)
+        Call QuickSortVar(t + 1, i2)
     End If
 End Sub
 Private Function divideVar(ByVal i1 As Long, ByVal i2 As Long) As Long
@@ -1062,11 +1086,11 @@ End Sub
 
 ' Die Rekursive datenunabhängige Methode QuickSort
 Private Sub QuickSortStr(ByVal i1 As Long, ByVal i2 As Long)
-    Dim T As Long
+    Dim t As Long
     If i2 > i1 Then
-        T = divideStr(i1, i2)
-        Call QuickSortStr(i1, T - 1)
-        Call QuickSortStr(T + 1, i2)
+        t = divideStr(i1, i2)
+        Call QuickSortStr(i1, t - 1)
+        Call QuickSortStr(t + 1, i2)
     End If
 End Sub
 Private Function divideStr(ByVal i1 As Long, ByVal i2 As Long) As Long
@@ -1095,11 +1119,11 @@ End Sub
 
 ' Die Rekursive datenunabhängige Methode QuickSort
 Private Sub QuickSortObj(ByVal i1 As Long, ByVal i2 As Long)
-    Dim T As Long
+    Dim t As Long
     If i2 > i1 Then
-        T = divideObj(i1, i2)
-        Call QuickSortObj(i1, T - 1)
-        Call QuickSortObj(T + 1, i2)
+        t = divideObj(i1, i2)
+        Call QuickSortObj(i1, t - 1)
+        Call QuickSortObj(t + 1, i2)
     End If
 End Sub
 Private Function divideObj(ByVal i1 As Long, ByVal i2 As Long) As Long

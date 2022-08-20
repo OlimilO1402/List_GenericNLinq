@@ -32,9 +32,10 @@ End Function
 
 Public Function CLStr(aList As List) As String
     If Not aList.DataType = vbWChar Then Exit Function
-    Dim l As Long: l = aList.Count: CLStr = Space$(l)
-    RtlMoveMemory ByVal StrPtr(CLStr), ByVal aList.DataPtr, 2 * l
+    Dim L As Long: L = aList.Count: CLStr = Space$(L)
+    RtlMoveMemory ByVal StrPtr(CLStr), ByVal aList.DataPtr, 2 * L
 End Function
+
 Function RndName() As String
     Dim s As String: s = Chr(65 + Rnd * 25)
     Dim i As Long
