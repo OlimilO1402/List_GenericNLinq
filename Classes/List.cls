@@ -76,7 +76,7 @@ Dim m_HashI    As Collection
 'for lambdas: CallByName(m_LambObj, m_LambFunc)
 Dim m_LambObj  As Object
 Dim m_LambFunc As String
-Private Declare Sub RtlMoveMemory Lib "kernel32" (ByRef Dst As Any, ByRef Src As Any, ByVal BytLen As Long)
+Private Declare Sub RtlMoveMemory Lib "kernel32" (ByRef Dst As Any, ByRef src As Any, ByVal BytLen As Long)
 Private Declare Sub RtlZeroMemory Lib "kernel32" (ByRef Dst As Any, ByVal BytLen As Long)
 Private Declare Function ArrPtr Lib "msvbvm60" Alias "VarPtr" (ByRef Arr() As Any) As Long
 
@@ -269,6 +269,7 @@ Try: On Error GoTo Catch
     Grow
     If m_DataType = vbObject Then
         Set m_Arr(m_Count) = avar
+        Set Add = avar
     Else
         If m_DataType = vbUserDefinedType Then
             'per cpymem die Daten hineinkopieren
@@ -279,6 +280,7 @@ Try: On Error GoTo Catch
         Else
             If VarType(avar) = vbObject Then
                 Set m_Arr(m_Count) = avar
+                Set Add = avar
             Else
                 m_Arr(m_Count) = avar
             End If
@@ -385,16 +387,16 @@ Public Sub AddRange(aArr) 'As List
             'für String
             If VarType(aArr) = vbString Then
                 Dim bl As Long: bl = LenB(aArr)
-                Dim L As Long: L = bl / 2
+                Dim l As Long: l = bl / 2
                 If m_IsHashed Then
-                    For i = 1 To L
+                    For i = 1 To l
                         Me.Add AscW(Mid$(aArr, i, 1))
                     Next
                 Else
-                    EnsureCapacity m_Count + L
+                    EnsureCapacity m_Count + l
                     Dim pDst As Long: pDst = DataPtrI(m_Count)
                     RtlMoveMemory ByVal pDst, ByVal StrPtr(aArr), bl
-                    m_Count = m_Count + L
+                    m_Count = m_Count + l
                 End If
             End If
         ElseIf m_DataType = vbUserDefinedType Then
@@ -1143,7 +1145,7 @@ Private Function divideObj(ByVal i1 As Long, ByVal i2 As Long) As Long
     divideObj = i
 End Function
 Private Function CompareObj(ByVal i1 As Long, ByVal i2 As Long) As Long
-    CompareObj = m_Arr(i1).Compare(m_Arr(i2))
+    CompareObj = m_Arr(i1).compare(m_Arr(i2))
 End Function
 Private Sub SwapObj(ByVal i1 As Long, ByVal i2 As Long)
     Dim tmp As Object: Set tmp = m_Arr(i1)
