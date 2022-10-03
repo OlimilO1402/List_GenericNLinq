@@ -90,6 +90,7 @@ End Sub
 
 Private Sub Class_Terminate()
     If (m_DataType And vbByRef) = vbByRef Then RtlZeroMemory ByVal VarPtr(m_Arr), 16
+    Erase m_Arr
 End Sub
 
 Friend Sub New_(Of_T As EDataType, _
@@ -128,15 +129,15 @@ End Sub
 
 '
 Friend Sub NewC(other As List)
-    'Copy-Constructor wird von Clone aufgerufen
+    'copy-c'tor will be called by function Clone
     With other
         Me.New_ .DataType, other, .IsHashed
     End With
 End Sub
 
-Private Sub InitGenericArray(t As EDataType)
+Private Sub InitGenericArray(T As EDataType)
     Dim u As Long: u = m_Capacity + 1
-    Select Case t
+    Select Case T
     Case vbInteger:    ReDim m_Arr(0 To u) As Integer:   m_bytLen = 2
     Case vbLong:       ReDim m_Arr(0 To u) As Long:      m_bytLen = 4
     Case vbSingle:     ReDim m_Arr(0 To u) As Single:    m_bytLen = 4
@@ -147,12 +148,12 @@ Private Sub InitGenericArray(t As EDataType)
     
     
     Case vbDate:       ReDim m_Arr(0 To u) As Date:      m_bytLen = 8
-    Case vbString:     ReDim m_Arr(0 To u) As String:    m_bytLen = 4
-    Case vbObject:     ReDim m_Arr(0 To u) As Object:    m_bytLen = 4
+    Case vbString:     ReDim m_Arr(0 To u) As String:    m_bytLen = MPtr.SizeOf_LongPtr ' 4
+    Case vbObject:     ReDim m_Arr(0 To u) As Object:    m_bytLen = MPtr.SizeOf_LongPtr ' 4
     Case vbBoolean:    ReDim m_Arr(0 To u) As Boolean:   m_bytLen = 2
-    Case vbVariant:    ReDim m_Arr(0 To u) As Variant:   m_bytLen = 16
-    Case vbDataObject: ReDim m_Arr(0 To u) As Variant:   m_bytLen = 16
-    Case vbDecimal:    ReDim m_Arr(0 To u) As Variant:   m_bytLen = 16
+    Case vbVariant:    ReDim m_Arr(0 To u) As Variant:   m_bytLen = LenB(m_Arr(0)) ' 16
+    Case vbDataObject: ReDim m_Arr(0 To u) As Variant:   m_bytLen = LenB(m_Arr(0)) ' 16
+    Case vbDecimal:    ReDim m_Arr(0 To u) As Variant:   m_bytLen = LenB(m_Arr(0)) ' 16
     Case vbByte:       ReDim m_Arr(0 To u) As Byte:      m_bytLen = 1
     Case vbWChar:      ReDim m_Arr(0 To u) As Integer:   m_bytLen = 2
     Case vbUserDefinedType
@@ -165,8 +166,9 @@ Private Sub InitGenericArray(t As EDataType)
     'wait for Add
     'Case vbArray:
     Case Else 'Fehlermeldung ausgeben
-        MsgBox "Datentyp wird nicht unterstützt: " & EDataType_ToStr(t)
+        MsgBox "Datatype not supported yet: " & EDataType_ToStr(T)
     End Select
+    'm_bytLen = LenB(m_Arr(0))
 End Sub
 
 'Private Function SizeOf(t As EDataType) As Byte
@@ -199,9 +201,9 @@ Friend Function GetType() As String
 End Function
 
 'Siehe auch Extra Projekt in der diese Funktion ausgiebig getestet wird
-Private Function EDataType_ToStr(t As EDataType) As String
+Private Function EDataType_ToStr(T As EDataType) As String
     Dim s As String
-    Select Case t
+    Select Case T
     Case vbInteger:    s = "Integer"    ' vbInteger    = 2
     Case vbLong:       s = "Long"       ' vbLong       = 3
     Case vbSingle:     s = "Single"     ' vbSingle     = 4
@@ -220,69 +222,72 @@ Private Function EDataType_ToStr(t As EDataType) As String
     Case vbWChar:      s = "WChar"
     'Case vbArray:      s = "Array"      ' vbArray      = 8192 (&H2000)
     Case Else:
-        If t And vbByRef Then s = "ByRef "
-        If t And vbArray Then s = "Array As " Else s = "Type still undefined"
+        If T And vbByRef Then s = "ByRef "
+        If T And vbArray Then s = "Array As " Else s = "Type still undefined"
     End Select
     EDataType_ToStr = s
 End Function
 
-Private Function VarType2_ToStr(var) As String
+Private Function VarType2_ToStr(Var) As String
     On Error Resume Next
-    Dim vt As EDataType: vt = VarType(var)
+    Dim vt As EDataType: vt = VarType(Var)
     Dim s As String: s = EDataType_ToStr(vt)
     If vt And vbArray Then
         vt = vt - vbArray
         s = s & EDataType_ToStr(vt)
         If vt = vbVariant Then
-            s = s & "(" & VarType2_ToStr(var(LBound(var))) & ")"
+            s = s & "(" & VarType2_ToStr(Var(LBound(Var))) & ")"
         ElseIf vt = vbObject Then
-            s = s & "(As " & TypeName(var(LBound(var))) & ")"
+            s = s & "(As " & TypeName(Var(LBound(Var))) & ")"
         End If
     ElseIf vt = vbObject Then
-        s = s & "(As " & TypeName(var) & ")"
+        s = s & "(As " & TypeName(Var) & ")"
     End If
     VarType2_ToStr = s
     On Error GoTo 0
 End Function
 
-Public Function Add(avar)
+Public Function Add(aVar, Optional ByVal aKey)
     ' Fügt am Ende der Liste ein Objekt hinzu
 Try: On Error GoTo Catch
-    If IsMissing(avar) Then Exit Function
+    If IsMissing(aVar) Then Exit Function
     If m_DataType = 0 Then
         'hier letzter Anker falls Typ noch nicht gesetzt
-        New_ VarType(avar)
+        New_ VarType(aVar)
     End If
     
     'If m_DataType = vbEmpty Or m_DataType = vbUserDefinedType Then
     If m_DataType = vbUserDefinedType And m_bytLen = 0 Then
         'Dreckmist, bei einem default-Property wird nur der Typ des Default props ermittelt
         'when Object has default prop get the type in another way, better directly from reading the variant
-        Dim dt As EDataType: dt = VarType(avar)
-        If (dt = vbUserDefinedType And m_bytLen = 0) Then m_bytLen = LenB(avar)
+        Dim dt As EDataType: dt = VarType(aVar)
+        If (dt = vbUserDefinedType And m_bytLen = 0) Then m_bytLen = LenB(aVar)
         m_DataType = dt
         InitGenericArray m_DataType
     End If
     If m_IsHashed Then
-        If Not HashAddKey(KeyFromVar(avar), m_Count) Then Exit Function
+        If IsMissing(aKey) Then
+            aKey = KeyFromVar(aVar)
+        End If
+        If Not HashAddKey(CStr(aKey), m_Count) Then Exit Function
     End If
     Grow
     If m_DataType = vbObject Then
-        Set m_Arr(m_Count) = avar
-        Set Add = avar
+        Set m_Arr(m_Count) = aVar
+        Set Add = aVar
     Else
         If m_DataType = vbUserDefinedType Then
             'per cpymem die Daten hineinkopieren
             'dim pData as Long: pdata =
             'RtlMoveMemory ByVal DataPtrI(m_Count), VarPtr(avar), m_bytLen
             'm_Arr (m_bytLen * m_Count)
-            m_Arr(m_Count) = avar
+            m_Arr(m_Count) = aVar
         Else
-            If VarType(avar) = vbObject Then
-                Set m_Arr(m_Count) = avar
-                Set Add = avar
+            If VarType(aVar) = vbObject Then
+                Set m_Arr(m_Count) = aVar
+                Set Add = aVar
             Else
-                m_Arr(m_Count) = avar
+                m_Arr(m_Count) = aVar
             End If
         End If
     End If
@@ -290,22 +295,22 @@ Try: On Error GoTo Catch
     m_Version = m_Version + CDec(1)
     Exit Function
 Catch:
-    ErrHandler "Add", "typ: " & EDataType_ToStr(m_DataType) & vbCrLf & "count: " & m_Count & vbCrLf & "tn: " & TypeName(avar)
+    ErrHandler "Add", "typ: " & EDataType_ToStr(m_DataType) & vbCrLf & "count: " & m_Count & vbCrLf & "tn: " & TypeName(aVar)
 End Function
-Private Function KeyFromVar(avar) As String
+Private Function KeyFromVar(aVar) As String
     Dim k As String
     'If m_IsHashed Then
         Select Case m_DataType
         Case vbObject
-            If avar Is Nothing Then Exit Function
-            k = avar.Key ' <-- Class must have property Key
+            If aVar Is Nothing Then Exit Function
+            k = aVar.Key ' <-- Class must have property Key
         Case vbUserDefinedType
-            k = avar.Key ' <-- Type  must have property Key
+            k = aVar.Key ' <-- Type  must have property Key
         Case Else
             'OK hier könnte man noch überprüfen, ist
             'aVar ein Array (Tuple) aus zwei Elementen, dann Vereinbarung, key-value der erste ein String, der zweite Value
             'oder man macht eine zweite function AddKV
-            k = CStr(avar)
+            k = CStr(aVar)
             'hier wird der Index gespeichert und der Key
             'besser key + vbnullchar+cstr(Index)
             'm_HashI.Add Key & vbNullChar & CStr(m_Count), Key
@@ -387,16 +392,16 @@ Public Sub AddRange(aArr) 'As List
             'für String
             If VarType(aArr) = vbString Then
                 Dim bl As Long: bl = LenB(aArr)
-                Dim l As Long: l = bl / 2
+                Dim L As Long: L = bl / 2
                 If m_IsHashed Then
-                    For i = 1 To l
+                    For i = 1 To L
                         Me.Add AscW(Mid$(aArr, i, 1))
                     Next
                 Else
-                    EnsureCapacity m_Count + l
+                    EnsureCapacity m_Count + L
                     Dim pDst As Long: pDst = DataPtrI(m_Count)
                     RtlMoveMemory ByVal pDst, ByVal StrPtr(aArr), bl
-                    m_Count = m_Count + l
+                    m_Count = m_Count + L
                 End If
             End If
         ElseIf m_DataType = vbUserDefinedType Then
@@ -442,10 +447,10 @@ Public Function Clone() As List
     Set Clone = New List: Clone.NewC Me
 End Function
 
-Public Function ContainsEqualObj(Obj As Object) As Boolean
+Public Function ContainsEqualObj(obj As Object) As Boolean
     Dim i As Long
     For i = 0 To m_Count - 1
-        If m_Arr(i).Equals(Obj) Then
+        If m_Arr(i).Equals(obj) Then
             ContainsEqualObj = True: Exit Function
         End If
     Next
@@ -472,12 +477,12 @@ Public Function ContainsKey(Key As String) As Boolean
     On Error GoTo 0
 End Function
 
-Public Function ContainsObj(Obj, Optional ByVal ObjUseKey As Boolean = False) As Boolean
+Public Function ContainsObj(obj, Optional ByVal ObjUseKey As Boolean = False) As Boolean
     'Bestimmt, ob sich ein Element in der Liste befindet.
     On Error Resume Next
     Dim Key As String
     If m_IsHashed Then
-        If m_DataType = vbObject Then Key = Obj.Key Else Key = Obj
+        If m_DataType = vbObject Then Key = obj.Key Else Key = obj
         If VBA.IsEmpty(m_HashI(Key)) Then: 'DoNothing
         ContainsObj = (Err.Number = 0)
     Else
@@ -490,7 +495,7 @@ Public Function ContainsObj(Obj, Optional ByVal ObjUseKey As Boolean = False) As
                     If m_Arr(i).Key = Key Then ContainsObj = True: Exit Function
                 Next
             Else
-                Dim pObj As Long: pObj = ObjPtr(Obj)
+                Dim pObj As Long: pObj = ObjPtr(obj)
                 For i = 0 To m_Count - 1
                     If ObjPtr(m_Arr(i)) = pObj Then ContainsObj = True: Exit Function
                 Next
@@ -501,7 +506,7 @@ Public Function ContainsObj(Obj, Optional ByVal ObjUseKey As Boolean = False) As
             'Key = Obj
             For i = 0 To m_Count - 1
                 'If CStr(m_Arr(i)) = Key Then Contains = True: Exit Function
-                If m_Arr(i) = Obj Then ContainsObj = True: Exit Function
+                If m_Arr(i) = obj Then ContainsObj = True: Exit Function
             Next
         End Select
     End If
@@ -539,21 +544,21 @@ Public Property Get IsHashed() As Boolean
     IsHashed = m_IsHashed
 End Property
 
-Public Property Let Item(ByVal Index As Long, avar)
+Public Property Let Item(ByVal Index As Long, aVar)
     If m_Count <= Index Then Exit Property
     Select Case m_DataType
-    Case vbObject:  m_Arr(Index).Parse avar '<- class must have function Parse
+    Case vbObject:  m_Arr(Index).Parse aVar '<- class must have function Parse
     Case vbVariant: Select Case VarType(m_Arr(Index))
-                    Case vbObject: m_Arr(Index).Parse avar
-                    Case Else:     m_Arr(Index) = avar
+                    Case vbObject: m_Arr(Index).Parse aVar
+                    Case Else:     m_Arr(Index) = aVar
                     End Select
-    Case Else:      m_Arr(Index) = avar
+    Case Else:      m_Arr(Index) = aVar
     End Select
 End Property
 
-Public Property Set Item(ByVal Index As Long, avar)
+Public Property Set Item(ByVal Index As Long, aVar)
     If m_Count <= Index Then Exit Property
-    Set m_Arr(Index) = avar
+    Set m_Arr(Index) = aVar
 End Property
 
 Public Property Get Item(ByVal Index As Long)
@@ -599,12 +604,12 @@ Public Property Get ItemByKey(aKey As String)
 End Property
 
 Public Property Get IndexOf(Value) As Long
-    Dim i As Long, Obj As Object
+    Dim i As Long, obj As Object
     IndexOf = -1 'first we assume its not in list
     If m_IsHashed Then
         Dim Key As String
         Select Case m_DataType
-        Case vbObject: Set Obj = Value: Key = Obj.Key
+        Case vbObject: Set obj = Value: Key = obj.Key
         Case vbString: Key = Value
         Case Else:     Key = Value
         End Select
@@ -788,8 +793,8 @@ End Property
 ' List As Stack
 ' ein Stack ist ein LiFo = Last in First out
 ' wird meist verwendet um einen Tree aufzubauen
-Public Sub SPush(avar)
-    Me.Add avar
+Public Sub SPush(aVar)
+    Me.Add aVar
 End Sub
 Public Function SPeek()
     If m_DataType = vbObject Then
@@ -818,9 +823,9 @@ End Function
 ' Meist arbeiten zwei verschiedene Objekte an der Queue
 ' * eines fügt am Ende Werte hinzu
 ' * das andere verarbeitet am Anfang die Objekte, und entfent sie
-Public Sub QEnqueue(avar)
+Public Sub QEnqueue(aVar)
     'Fügt am Ende der Queue ein Objekt hinzu
-    Me.Add avar
+    Me.Add aVar
 End Sub
 Public Function QPeek()
     'gibt das Objekt am Anfang der Queue zurück, ohne es zu entfernen.
@@ -844,15 +849,15 @@ Public Function QDequeue()
 End Function
 
 'sodale jetzt noch ein Insert dann is die reine List.Generic-Klasse ohne LINQ fertig
-Public Sub Insert(ByVal Index As Long, avar)
+Public Sub Insert(ByVal Index As Long, aVar)
     If m_IsHashed Then
         'zuerst überprüfen ob schon ein ELement da ist
-        If ContainsKey(KeyFromVar(avar)) Then Exit Sub
+        If ContainsKey(KeyFromVar(aVar)) Then Exit Sub
     End If
     'If Index < 0 Then Exit Sub
     'If m_Count <= Index Then Exit Sub
     If Not (0 <= Index And Index <= m_Count) Then Exit Sub
-    If Index = m_Count Then Me.Add avar: Exit Sub
+    If Index = m_Count Then Me.Add aVar: Exit Sub
     Grow
     Dim pSrc As Long: pSrc = DataPtrI(Index) ' VarPtr(m_Arr(Index)) 'pSrc - m_bytLen
     Dim pDst As Long: pDst = pSrc + m_bytLen 'VarPtr(m_Arr(Index + 1))
@@ -860,9 +865,9 @@ Public Sub Insert(ByVal Index As Long, avar)
     RtlMoveMemory ByVal pDst, ByVal pSrc, BLen
     RtlZeroMemory ByVal pSrc, m_bytLen
     If m_DataType = vbObject Then
-        Set m_Arr(Index) = avar
+        Set m_Arr(Index) = aVar
     Else
-        m_Arr(Index) = avar
+        m_Arr(Index) = aVar
     End If
     m_Count = m_Count + 1
     m_Version = m_Version + CDec(1)
@@ -900,8 +905,8 @@ Public Sub Remove(ByVal Index As Long)
     If m_IsHashed Then ReInitIndices
 End Sub
 
-Public Sub RemoveObj(Obj As Object)
-    Dim i As Long: i = IndexOf(Obj)
+Public Sub RemoveObj(obj As Object)
+    Dim i As Long: i = IndexOf(obj)
     'if Obj is not contained IndexOf returns -1
     If i < 0 Then Exit Sub
     Remove i
@@ -1055,11 +1060,11 @@ End Sub
 
 ' Die Rekursive datenunabhängige Methode QuickSort
 Private Sub QuickSortVar(ByVal i1 As Long, ByVal i2 As Long)
-    Dim t As Long
+    Dim T As Long
     If i2 > i1 Then
-        t = divideVar(i1, i2)
-        Call QuickSortVar(i1, t - 1)
-        Call QuickSortVar(t + 1, i2)
+        T = divideVar(i1, i2)
+        Call QuickSortVar(i1, T - 1)
+        Call QuickSortVar(T + 1, i2)
     End If
 End Sub
 Private Function divideVar(ByVal i1 As Long, ByVal i2 As Long) As Long
@@ -1088,11 +1093,11 @@ End Sub
 
 ' Die Rekursive datenunabhängige Methode QuickSort
 Private Sub QuickSortStr(ByVal i1 As Long, ByVal i2 As Long)
-    Dim t As Long
+    Dim T As Long
     If i2 > i1 Then
-        t = divideStr(i1, i2)
-        Call QuickSortStr(i1, t - 1)
-        Call QuickSortStr(t + 1, i2)
+        T = divideStr(i1, i2)
+        Call QuickSortStr(i1, T - 1)
+        Call QuickSortStr(T + 1, i2)
     End If
 End Sub
 Private Function divideStr(ByVal i1 As Long, ByVal i2 As Long) As Long
@@ -1121,11 +1126,11 @@ End Sub
 
 ' Die Rekursive datenunabhängige Methode QuickSort
 Private Sub QuickSortObj(ByVal i1 As Long, ByVal i2 As Long)
-    Dim t As Long
+    Dim T As Long
     If i2 > i1 Then
-        t = divideObj(i1, i2)
-        Call QuickSortObj(i1, t - 1)
-        Call QuickSortObj(t + 1, i2)
+        T = divideObj(i1, i2)
+        Call QuickSortObj(i1, T - 1)
+        Call QuickSortObj(T + 1, i2)
     End If
 End Sub
 Private Function divideObj(ByVal i1 As Long, ByVal i2 As Long) As Long
