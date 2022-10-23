@@ -116,8 +116,7 @@ Friend Sub New_(Of_T As EDataType, _
     'Reihenfolge wichtig, so lassen!
     If Not IsMissing(ArrColStrTypList) Then Me.AddRange ArrColStrTypList
 End Sub
-
-'in Module MNew:
+'Copy to MNew:
 'Public Function List(Of_T As EDataType, _
 '                     Optional ArrColStrTypList, _
 '                     Optional ByVal IsHashed As Boolean = False, _
