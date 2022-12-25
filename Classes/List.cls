@@ -76,9 +76,15 @@ Dim m_HashI    As Collection
 'for lambdas: CallByName(m_LambObj, m_LambFunc)
 Dim m_LambObj  As Object
 Dim m_LambFunc As String
-Private Declare Sub RtlMoveMemory Lib "kernel32" (ByRef Dst As Any, ByRef src As Any, ByVal BytLen As Long)
-Private Declare Sub RtlZeroMemory Lib "kernel32" (ByRef Dst As Any, ByVal BytLen As Long)
-Private Declare Function ArrPtr Lib "msvbvm60" Alias "VarPtr" (ByRef Arr() As Any) As Long
+#If VBA7 Then
+    Private Declare PtrSafe Sub RtlMoveMemory Lib "kernel32" (ByRef Dst As Any, ByRef src As Any, ByVal BytLen As Long)
+    Private Declare PtrSafe Sub RtlZeroMemory Lib "kernel32" (ByRef Dst As Any, ByVal BytLen As Long)
+    Private Declare PtrSafe Function ArrPtr Lib "msvbvm60" Alias "VarPtr" (ByRef Arr() As Any) As Long
+#Else
+    Private Declare Sub RtlMoveMemory Lib "kernel32" (ByRef Dst As Any, ByRef src As Any, ByVal BytLen As Long)
+    Private Declare Sub RtlZeroMemory Lib "kernel32" (ByRef Dst As Any, ByVal BytLen As Long)
+    Private Declare Function ArrPtr Lib "msvbvm60" Alias "VarPtr" (ByRef Arr() As Any) As Long
+#End If
 
 Private Sub Class_Initialize()
     'm_DataType = vbEmpty 'Variant
@@ -116,7 +122,7 @@ Friend Sub New_(Of_T As EDataType, _
     'Reihenfolge wichtig, so lassen!
     If Not IsMissing(ArrColStrTypList) Then Me.AddRange ArrColStrTypList
 End Sub
-'Copy to MNew:
+''Copy to MNew:
 'Public Function List(Of_T As EDataType, _
 '                     Optional ArrColStrTypList, _
 '                     Optional ByVal IsHashed As Boolean = False, _
