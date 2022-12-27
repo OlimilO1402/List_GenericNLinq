@@ -92,26 +92,26 @@ End Property
 
 ' Liest den Text in einer ListBox aus mit dem
 ' angegebenen Index aus und gibt diesen zurück
-Public Function LBGetItemText(Obj As ListBox, Index As Long) As String
+Public Function LBGetItemText(obj As ListBox, Index As Long) As String
     Dim Buffer As String
     Dim TextLen As Long
-    TextLen = SendMessage(Obj.hwnd, LB_GETTEXTLEN, Index, ByVal 0&)
+    TextLen = SendMessage(obj.hwnd, LB_GETTEXTLEN, Index, ByVal 0&)
     If TextLen > 0 Then
         Buffer = Space(TextLen)
-        Call SendMessage(Obj.hwnd, LB_GETTEXT, Index, ByVal Buffer)
+        Call SendMessage(obj.hwnd, LB_GETTEXT, Index, ByVal Buffer)
     End If
     LBGetItemText = Buffer
 End Function
 
 ' Ersetzt den Item-Text an der Position 'Index' mit 'NewText'
 ' Der Eintrag wird markiert!
-Public Sub LBSetItemText(Obj As ListBox, Index As Long, NewText As String)
+Public Sub LBSetItemText(obj As ListBox, Index As Long, NewText As String)
     ' zunächst Eintrag löschen
-    If SendMessage(Obj.hwnd, LB_DELETESTRING, Index, ByVal 0&) > 0 Then
+    If SendMessage(obj.hwnd, LB_DELETESTRING, Index, ByVal 0&) > 0 Then
         ' und neuen Eintrag an diese Position wieder einfügen
-        Call SendMessage(Obj.hwnd, LB_INSERTSTRING, Index, ByVal NewText)
+        Call SendMessage(obj.hwnd, LB_INSERTSTRING, Index, ByVal NewText)
         ' und noch selectieren
-        Call SendMessage(Obj.hwnd, LB_SETCURSEL, Index, ByVal 0)
+        Call SendMessage(obj.hwnd, LB_SETCURSEL, Index, ByVal 0)
     End If
 End Sub
 

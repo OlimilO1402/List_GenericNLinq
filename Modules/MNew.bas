@@ -3,7 +3,7 @@ Option Explicit
 Private Const LB_GETCURSEL As Long = &H188&
 Private Const LB_SETCURSEL As Long = &H186&
 Private Declare Function SendMessage Lib "user32.dll" Alias "SendMessageA" (ByVal hwnd As Long, ByVal wMsg As Long, ByVal wParam As Long, ByRef lParam As Any) As Long
-Private Declare Sub RtlMoveMemory Lib "kernel32" (ByRef Dst As Any, ByRef Src As Any, ByVal BytLen As Long)
+Private Declare Sub RtlMoveMemory Lib "kernel32" (ByRef Dst As Any, ByRef src As Any, ByVal BytLen As Long)
 
 Public Function List(Of_T As EDataType, _
                      Optional ArrColStrTypList, _
@@ -79,10 +79,10 @@ Function ArrayS(ParamArray ArgList() As Variant) As String()
 End Function
 
 Function ArrayContains(Arr(), var) As Boolean
-    Dim v
-    For Each v In Arr
-        If Not VBA.Information.IsEmpty(v) And Not VBA.Information.IsMissing(v) Then
-            If v = var Then ArrayContains = True: Exit Function
+    Dim V
+    For Each V In Arr
+        If Not VBA.Information.IsEmpty(V) And Not VBA.Information.IsMissing(V) Then
+            If V = var Then ArrayContains = True: Exit Function
         End If
     Next
 End Function
@@ -115,20 +115,28 @@ End Sub
 Function EDataType_ToStr(ByVal vt As EDataType) As String
     Dim s As String
     Select Case vt
-    Case EDataType.vbInteger:    s = "Integer"    ' vbInteger    = 2
-    Case EDataType.vbLong:       s = "Long"       ' vbLong       = 3
-    Case EDataType.vbSingle:     s = "Single"     ' vbSingle     = 4
-    Case EDataType.vbDouble:     s = "Double"     ' vbDouble     = 5
-    Case EDataType.vbCurrency:   s = "Currency"   ' vbCurrency   = 6
-    Case EDataType.vbDate:       s = "Date"       ' vbDate       = 7
-    Case EDataType.vbString:     s = "String"     ' vbString     = 8
-    Case EDataType.vbObject:     s = "Object"     ' vbObject     = 9
-    Case EDataType.vbBoolean:    s = "Boolean"    ' vbBoolean    = 11
-    Case EDataType.vbVariant:    s = "Variant"    ' vbVariant    = 12
-    Case EDataType.vbDecimal:    s = "Decimal"    ' vbDecimal    = 14
-    Case EDataType.vbByte:       s = "Byte"       ' vbByte       = 17 (&H11)
+    Case EDataType.vbInteger:    s = "Integer"      ' vbInteger    =  2
+    Case EDataType.vbLong:       s = "Long"         ' vbLong       =  3
+    Case EDataType.vbSingle:     s = "Single"       ' vbSingle     =  4
+    Case EDataType.vbDouble:     s = "Double"       ' vbDouble     =  5
+    Case EDataType.vbCurrency:   s = "Currency"     ' vbCurrency   =  6
+    
+    
+    Case EDataType.vbDate:       s = "Date"         ' vbDate       = 7
+    Case EDataType.vbString:     s = "String"       ' vbString     = 8
+    Case EDataType.vbObject:     s = "Object"       ' vbObject     = 9
+    Case EDataType.vbBoolean:    s = "Boolean"      ' vbBoolean    = 11
+    Case EDataType.vbVariant:    s = "Variant"      ' vbVariant    = 12
+    Case EDataType.vbDataObject: s = "DataObject"   ' vbDataObject = 13
+    Case EDataType.vbDecimal:    s = "Decimal"      ' vbDecimal    = 14
+    Case EDataType.vbSByte:      s = "SByte"        ' vbSByte      = 16 (&H10)
+    Case EDataType.vbByte:       s = "Byte"         ' vbByte       = 17 (&H11)
+    Case EDataType.vbUInteger:   s = "UInteger"     ' vbUInteger   = 18
+    Case EDataType.vbULong:      s = "ULong"        ' vbULong      = 19
+    Case EDataType.vbLongLong:   s = "LongLong"     ' vbLongLong   = 20
+    Case EDataType.vbULongLong:  s = "ULongLong"    ' vbULongLong  = 21
+    Case EDataType.vbWChar:      s = "WChar"        ' vbWChar      = 32 (&H27)
     Case EDataType.vbUserDefinedType: s = "UserDefinedType" 'vbUserDefinedType = 36 (&H24)
-    Case EDataType.vbWChar:      s = "WChar"
     Case Else:
     End Select
     EDataType_ToStr = s
@@ -140,17 +148,18 @@ End Function
 
 ' ListIndex von ListBox ermitteln
 ' Gibt den aktuell selektierten Index zurück
-Public Function LBGetListIndex(Obj As ListBox) As Long
-    LBGetListIndex = SendMessage(Obj.hwnd, LB_GETCURSEL, 0, ByVal 0&)
+Public Function LBGetListIndex(obj As ListBox) As Long
+    LBGetListIndex = SendMessage(obj.hwnd, LB_GETCURSEL, 0, ByVal 0&)
 End Function
 
 ' ListIndex von ListBox setzen
 ' setzt den ListIndex und markiert den Eintrag
 ' Ein Click wird nicht ausgelöst!
-Public Sub LBSetListIndex(Obj As ListBox, NewIndex As Long)
-    Call SendMessage(Obj.hwnd, LB_SETCURSEL, NewIndex, ByVal 0&)
+Public Sub LBSetListIndex(obj As ListBox, NewIndex As Long)
+    Call SendMessage(obj.hwnd, LB_SETCURSEL, NewIndex, ByVal 0&)
 End Sub
 
+' The GridSettingsType is just for testing the ability to list structure-types in ax-dlls
 Public Function GridSettingsTypeRnd() As GridSettingsType
     Randomize
     With GridSettingsTypeRnd

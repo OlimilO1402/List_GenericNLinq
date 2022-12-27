@@ -19,38 +19,40 @@ Public Enum EDataType 'Public Enum Extended VbVarType
     'vbNone = 0
     'Values like vbEmpty, vbNull, vbError are missing here
     'beacuse these types can't be stored in an array anyway
-    vbInteger = VbVarType.vbInteger    '   2   '   VT_I2          = 0x0002,
-    vbLong = VbVarType.vbLong          '   3   '   VT_I4          = 0x0003,
-    vbSingle = VbVarType.vbSingle      '   4   '   VT_R4          = 0x0004,
-    vbDouble = VbVarType.vbDouble      '   5   '   VT_R8          = 0x0005,
-    vbCurrency = VbVarType.vbCurrency  '   6   '   VT_CY          = 0x0006,
-    vbDate = VbVarType.vbDate          '   7   '   VT_DATE        = 0x0007,
-    vbString = VbVarType.vbString      '   8   '   VT_BSTR        = 0x0008,
-    vbObject = VbVarType.vbObject      '   9   '   VT_DISPATCH    = 0x0009, 'IUnknown+IDispatch
-    vbBoolean = VbVarType.vbBoolean    ' &HB&  '   VT_BOOL        = 0x000B,
-    vbVariant = VbVarType.vbVariant    ' &HC&  '   VT_VARIANT     = 0x000C,
-    'Of_Unknown, 'Of_DataObject = VbVarType.vbDataObject ' &HD& '   VT_UNKNOWN = 0x000D, 'IUnknown
-    vbDecimal = VbVarType.vbDecimal    ' &HE&  '   VT_DECIMAL     = 0x000E,
-                                        ' &HF&  ?
-    vbByte = VbVarType.vbByte          ' &H10& '   VT_I1          = 0x0010,
-    'vbUByte = &H11                     ' &H11& '   VT_UI1         = 0x0011,
-    'vbUInteger = &H12                  ' &H12& '   VT_UI2         = 0x0012,
-    'vbULong = &H13                     ' &H13& '   VT_UI4         = 0x0013,
-    'vbLongLong = &H14                  ' &H14& '   VT_I8          = 0x0014,
-    'vbULongLong = &H15                 ' &H15& '   VT_UI8         = 0x0015,
-    'vbInt = &H16                       ' &H16& '   VT_INT         = 0x0016,
-    'vbUInt = &H17                      ' &H17& '   VT_UINT        = 0x0017,
-    'vbVoid = &H18                      ' &H18& '   VT_VOID        = 0x0018,
-    'vbHResult = &H19                   ' &H19& '   VT_HRESULT     = 0x0019,
-    'vbPtr = &H1A                       ' &H1A& '   VT_PTR         = 0x001A,
-    'vbSafeArray = &H1B                 ' &H1B& '   VT_SAFEARRAY   = 0x001B,
-    'vbCArray = &H1C                    ' &H1C& '   VT_CARRAY      = 0x001C,
-    'vbUserdefined = &H1D               ' &H1D& '   VT_USERDEFINED = 0x001D,
-    'vbLPStr = &H1E                     ' &H1E& '   VT_LPSTR       = 0x001E,
-    'vbLPWStr = &H1F                    ' &H1F& '   VT_LPWSTR      = 0x001F,
-    vbWChar '= &H27&                    ' &H27&
+    vbInteger = VbVarType.vbInteger         '   2   &H2&    VT_I2       V,S,T ' * be a  2-byte signed integer.
+    vbLong = VbVarType.vbLong               '   3   &H3&    VT_I4       V,S,T ' * be a  4-byte signed integer.
+    vbSingle = VbVarType.vbSingle           '   4   &H4&    VT_R4       V,S,T ' * be a  4-byte IEEE floating-point number.
+    vbDouble = VbVarType.vbDouble           '   5   &H5&    VT_R8       V,S,T ' * be an 8-byte IEEE floating-point number.
+    vbCurrency = VbVarType.vbCurrency       '   6   &H6&    VT_CY       V,S,T ' * be CURRENCY (see section 2.2.24).
+    vbDate = VbVarType.vbDate               '   7   &H7&    VT_DATE     V,S,T ' * be DATE (see section 2.2.25).
+    vbString = VbVarType.vbString           '   8   &H8&    VT_BSTR     V,S,T ' * be BSTR (see section 2.2.23).
+    vbObject = VbVarType.vbObject           '   9   &H9&    VT_DISPATCH V,S,T ' * be a pointer to IDispatch (see section 3.1.4).  'IUnknown+IDispatch
+    vbError = VbVarType.vbError             '   10  &HA&    VT_ERROR    V,S,T ' * be HRESULT.                                        'andalso IsMissing (Nicht vorhanden)
+    vbBoolean = VbVarType.vbBoolean         '   11  &HB&    VT_BOOL     V,S,T ' * be VARIANT_BOOL (see section 2.2.27).
+    vbVariant = VbVarType.vbVariant         '   12  &HC&    VT_VARIANT  V,S,T ' * be VARIANT (see section 2.2.29). It MUST appear with the bit flag VT_BYREF.
+    vbDataObject = VbVarType.vbDataObject   '   13  &HD&    VT_UNKNOWN  V,S,T ' * be a pointer to IUnknown.
+    vbDecimal = VbVarType.vbDecimal         '   14  &HE&    VT_DECIMAL  V,S,T ' * be DECIMAL (see section 2.2.26).
+                                            '   15  &HF&                      '
+    vbSByte = 16                            '   16  &H10&   VT_I1       V,S,T ' * be a 1-byte integer.
+    vbByte = VbVarType.vbByte               '   17  &H11&   VT_UI1      V,S,T ' * be a 1-byte unsigned integer.
+    vbUInteger = 18                         '   18  &H12&   VT_UI2      V,S,T ' * be a 2-byte unsigned integer.
+    vbULong = 19                            '   19  &H13&   VT_UI4      V,S,T ' * be a 4-byte unsigned integer.
+    vbLongLong = 20                         '   20  &H14&   VT_I8       V,S,T ' * be an 8-byte  signed integer.
+    vbULongLong = 21                        '   21  &H15&   VT_UI8      V,S,T ' * be an 8-byte unsigned integer.
+    'vbInt = &H16                           '   22  &H16&   VT_INT         = 0x0016,
+    'vbUInt = &H17                          '   23  &H17&   VT_UINT        = 0x0017,
+    'vbVoid = &H18                          '   24  &H18&   VT_VOID        = 0x0018,
+    'vbHResult = &H19                       '   25  &H19&   VT_HRESULT     = 0x0019,
+    'vbPtr = &H1A                           '   26  &H1A&   VT_PTR         = 0x001A,
+    'vbSafeArray = &H1B                     '   27  &H1B&   VT_SAFEARRAY   = 0x001B,
+    'vbCArray = &H1C                        '   28  &H1C&   VT_CARRAY      = 0x001C,
+    'vbUserdefined = &H1D                   '   29  &H1D&   VT_USERDEFINED = 0x001D,
+    'vbLPStr = &H1E                         '   30  &H1E&   VT_LPSTR       = 0x001E,
+    'vbLPWStr = &H1F                        '   31  &H1F&   VT_LPWSTR      = 0x001F,
+    vbWChar = 39                            '   39  &H27&
     vbUserDefinedType = VbVarType.vbUserDefinedType '   VT_RECORD = 0x0024,
     'As_Array = &H2000&                  '&H2000& '  VT_ARRAY       = 0x2000, 'Arr() As Integer
+    vbArray = VbVarType.vbArray             ' 8192  &H2000& VT_ARRAY    V,S    The type of the element or contained field MUST be a SAFEARRAY (see section 2.2.30.10).
     vbByRef = &H4000&                  '&H4000& '  VT_BYREF       = 0x4000
     'I want compatiblity with ByRef to another List
     'this could be useful with Arrays as UdT with pointers
@@ -58,7 +60,7 @@ Public Enum EDataType 'Public Enum Extended VbVarType
 End Enum
 ' } VARENUM;
 'Class List
-'1795 lines of concentrated power of List for VB6, all in one Class, with a whiff of Generics and LINQ
+'1823 lines of concentrated power of List for VB6, all in one Class, with a whiff of Generics and LINQ
 'This Class contains the functionality of Collection, List, Enumerable, Stack, Queue and Dictionary what else do you need.
 Dim m_Arr
 Dim m_DataType As EDataType
@@ -143,25 +145,26 @@ End Sub
 Private Sub InitGenericArray(T As EDataType)
     Dim u As Long: u = m_Capacity + 1
     Select Case T
-    Case vbInteger:    ReDim m_Arr(0 To u) As Integer:   m_bytLen = 2
-    Case vbLong:       ReDim m_Arr(0 To u) As Long:      m_bytLen = 4
-    Case vbSingle:     ReDim m_Arr(0 To u) As Single:    m_bytLen = 4
-    Case vbDouble:     ReDim m_Arr(0 To u) As Double:    m_bytLen = 8
-    Case vbCurrency:   ReDim m_Arr(0 To u) As Currency:  m_bytLen = 8
+    Case EDataType.vbInteger:    ReDim m_Arr(0 To u) As Integer:   m_bytLen = 2
+    Case EDataType.vbUInteger:   ReDim m_Arr(0 To u) As Integer:   m_bytLen = 2
+    Case EDataType.vbLong:       ReDim m_Arr(0 To u) As Long:      m_bytLen = 4
+    Case EDataType.vbULong:      ReDim m_Arr(0 To u) As Long:      m_bytLen = 4
+    Case EDataType.vbSingle:     ReDim m_Arr(0 To u) As Single:    m_bytLen = 4
+    Case EDataType.vbDouble:     ReDim m_Arr(0 To u) As Double:    m_bytLen = 8
+    Case EDataType.vbCurrency:   ReDim m_Arr(0 To u) As Currency:  m_bytLen = 8
+    Case EDataType.vbLongLong:   ReDim m_Arr(0 To u) As Currency:  m_bytLen = 8
+    Case EDataType.vbULongLong:  ReDim m_Arr(0 To u) As Currency:  m_bytLen = 8
     
-    
-    
-    
-    Case vbDate:       ReDim m_Arr(0 To u) As Date:      m_bytLen = 8
-    Case vbString:     ReDim m_Arr(0 To u) As String:    m_bytLen = MPtr.SizeOf_LongPtr ' 4
-    Case vbObject:     ReDim m_Arr(0 To u) As Object:    m_bytLen = MPtr.SizeOf_LongPtr ' 4
-    Case vbBoolean:    ReDim m_Arr(0 To u) As Boolean:   m_bytLen = 2
-    Case vbVariant:    ReDim m_Arr(0 To u) As Variant:   m_bytLen = LenB(m_Arr(0)) ' 16
-    Case vbDataObject: ReDim m_Arr(0 To u) As Variant:   m_bytLen = LenB(m_Arr(0)) ' 16
-    Case vbDecimal:    ReDim m_Arr(0 To u) As Variant:   m_bytLen = LenB(m_Arr(0)) ' 16
-    Case vbByte:       ReDim m_Arr(0 To u) As Byte:      m_bytLen = 1
-    Case vbWChar:      ReDim m_Arr(0 To u) As Integer:   m_bytLen = 2
-    Case vbUserDefinedType
+    Case EDataType.vbDate:       ReDim m_Arr(0 To u) As Date:      m_bytLen = 8
+    Case EDataType.vbString:     ReDim m_Arr(0 To u) As String:    m_bytLen = MPtr.SizeOf_LongPtr ' 4
+    Case EDataType.vbObject:     ReDim m_Arr(0 To u) As Object:    m_bytLen = MPtr.SizeOf_LongPtr ' 4
+    Case EDataType.vbBoolean:    ReDim m_Arr(0 To u) As Boolean:   m_bytLen = 2
+    Case EDataType.vbVariant:    ReDim m_Arr(0 To u) As Variant:   m_bytLen = LenB(m_Arr(0)) ' 16
+    Case EDataType.vbDataObject: ReDim m_Arr(0 To u) As Variant:   m_bytLen = LenB(m_Arr(0)) ' 16
+    Case EDataType.vbDecimal:    ReDim m_Arr(0 To u) As Variant:   m_bytLen = LenB(m_Arr(0)) ' 16
+    Case EDataType.vbByte:       ReDim m_Arr(0 To u) As Byte:      m_bytLen = 1
+    Case EDataType.vbWChar:      ReDim m_Arr(0 To u) As Integer:   m_bytLen = 2
+    Case EDataType.vbUserDefinedType
                        'entweder so:
                        'ReDim m_Arr(0 To u * m_bytLen) As Byte
                        'oder so:
@@ -209,22 +212,30 @@ End Function
 Private Function EDataType_ToStr(T As EDataType) As String
     Dim s As String
     Select Case T
-    Case vbInteger:    s = "Integer"    ' vbInteger    = 2
-    Case vbLong:       s = "Long"       ' vbLong       = 3
-    Case vbSingle:     s = "Single"     ' vbSingle     = 4
-    Case vbDouble:     s = "Double"     ' vbDouble     = 5
-    Case vbCurrency:   s = "Currency"   ' vbCurrency   = 6
-    Case vbDate:       s = "Date"       ' vbDate       = 7
-    Case vbString:     s = "String"     ' vbString     = 8
-    Case vbObject:     s = "Object"     ' vbObject     = 9
-    Case vbBoolean:    s = "Boolean"    ' vbBoolean    = 11
-    Case vbVariant:    s = "Variant"    ' vbVariant    = 12
-    Case vbDataObject: s = "DataObject" ' vbDataObject = 13
-    Case vbDecimal:    s = "Decimal"    ' vbDecimal    = 14
-    '15, 16?
-    Case vbByte:       s = "Byte"       ' vbByte       = 17 (&H11)
+    Case vbInteger:         s = "Integer"    ' vbInteger    = 2
+    Case vbLong:            s = "Long"       ' vbLong       = 3
+    Case vbSingle:          s = "Single"     ' vbSingle     = 4
+    Case vbDouble:          s = "Double"     ' vbDouble     = 5
+    Case vbCurrency:        s = "Currency"   ' vbCurrency   = 6
+    Case vbDate:            s = "Date"       ' vbDate       = 7
+    Case vbString:          s = "String"     ' vbString     = 8
+    Case vbObject:          s = "Object"     ' vbObject     = 9
+    '
+    Case vbBoolean:         s = "Boolean"    ' vbBoolean    = 11
+    Case vbVariant:         s = "Variant"    ' vbVariant    = 12
+    Case vbDataObject:      s = "DataObject" ' vbDataObject = 13
+    Case vbDecimal:         s = "Decimal"    ' vbDecimal    = 14
+    '15?
+    Case vbSByte:           s = "SByte"      ' vbSByte      = 16 (&H10)
+    Case vbByte:            s = "Byte"       ' vbByte       = 17 (&H11)
+    Case vbUInteger:        s = "UInteger"   ' vbUInteger   = 18 (&H12)
+    Case vbULong:           s = "ULong"      ' vbULong      = 19 (&H13)
+    Case vbLongLong:        s = "LongLong"   ' vbLongLong   = 20 (&H14)
+    Case vbULongLong:       s = "ULongLong"  ' vbULongLong  = 21 (&H15)
+    
     Case vbUserDefinedType: s = "UserDefinedType" 'vbUserDefinedType = 36 (&H24)
-    Case vbWChar:      s = "WChar"
+    
+    Case vbWChar:           s = "WChar"
     'Case vbArray:      s = "Array"      ' vbArray      = 8192 (&H2000)
     Case Else:
         If T And vbByRef Then s = "ByRef "
@@ -233,20 +244,20 @@ Private Function EDataType_ToStr(T As EDataType) As String
     EDataType_ToStr = s
 End Function
 
-Private Function VarType2_ToStr(Var) As String
+Private Function VarType2_ToStr(var) As String
     On Error Resume Next
-    Dim vt As EDataType: vt = VarType(Var)
+    Dim vt As EDataType: vt = VarType(var)
     Dim s As String: s = EDataType_ToStr(vt)
     If vt And vbArray Then
         vt = vt - vbArray
         s = s & EDataType_ToStr(vt)
         If vt = vbVariant Then
-            s = s & "(" & VarType2_ToStr(Var(LBound(Var))) & ")"
+            s = s & "(" & VarType2_ToStr(var(LBound(var))) & ")"
         ElseIf vt = vbObject Then
-            s = s & "(As " & TypeName(Var(LBound(Var))) & ")"
+            s = s & "(As " & TypeName(var(LBound(var))) & ")"
         End If
     ElseIf vt = vbObject Then
-        s = s & "(As " & TypeName(Var) & ")"
+        s = s & "(As " & TypeName(var) & ")"
     End If
     VarType2_ToStr = s
     On Error GoTo 0
@@ -387,10 +398,10 @@ End Property
 Public Sub AddRange(aArr) 'As List
     ' Fügt die Elemente der angegebenen Auflistung der List hinzu
     If VBA.Information.IsEmpty(aArr) Then Exit Sub
-    Dim i As Long, v
+    Dim i As Long, V
     If TypeOf aArr Is List Then
-        For Each v In aArr.GetEnumerator
-            Me.Add v
+        For Each V In aArr.GetEnumerator
+            Me.Add V
         Next
     Else
         If m_DataType = vbWChar Then
@@ -411,13 +422,13 @@ Public Sub AddRange(aArr) 'As List
             End If
         ElseIf m_DataType = vbUserDefinedType Then
             For i = 0 To UBound(aArr)
-                v = aArr(i)
-                Me.Add v
+                V = aArr(i)
+                Me.Add V
             Next
         Else
             'für Collection oder Array
-            For Each v In aArr
-                Me.Add v
+            For Each V In aArr
+                Me.Add V
             Next
         End If
     End If
@@ -1155,7 +1166,7 @@ Private Function divideObj(ByVal i1 As Long, ByVal i2 As Long) As Long
     divideObj = i
 End Function
 Private Function CompareObj(ByVal i1 As Long, ByVal i2 As Long) As Long
-    CompareObj = m_Arr(i1).compare(m_Arr(i2))
+    CompareObj = m_Arr(i1).Compare(m_Arr(i2))
 End Function
 Private Sub SwapObj(ByVal i1 As Long, ByVal i2 As Long)
     Dim tmp As Object: Set tmp = m_Arr(i1)
@@ -1190,10 +1201,16 @@ Private Sub priv_Reverse()
     End If
 End Sub
 
-Public Sub ToListbox(aLBorCB, Optional ByVal UseListIndex As Boolean = False)
+Public Sub ToListbox(aLBorCB, Optional ByVal UseListIndex As Boolean = False, Optional lambObj As Object = Nothing, Optional FuncName As String = vbNullString)
 'ToListbox Me.LstPerson, True
     Dim i As Long
     aLBorCB.Clear
+    If Not lambObj Is Nothing And Len(FuncName) Then
+        For i = 0 To m_Count - 1
+            aLBorCB.AddItem CallByName(lambObj, FuncName, VbMethod, (m_Arr(i)))
+        Next
+        Exit Sub
+    End If
     For i = 0 To m_Count - 1
         aLBorCB.AddItem ItemToStr(i)
     Next

@@ -1,10 +1,15 @@
 Attribute VB_Name = "MUdt"
 Option Explicit
-'herein just 3 helper-functions for the udt for convenient-reasons
+'herein 3 helper-functions for the udt for testing purposes
 
-Function GridSettingsType_ToStr(t As GridSettingsType) As String
-    Dim s As String: s = TypeName(t) & "{"
-    With t
+Public Function GridSettingsTypeToStr(V) As String
+    Dim T As GridSettingsType: T = V
+    GridSettingsTypeToStr = GridSettingsType_ToStr(T)
+End Function
+
+Public Function GridSettingsType_ToStr(T As GridSettingsType) As String
+    Dim s As String: s = TypeName(T) & "{"
+    With T
         s = s & "AllowColDragging := " & .AllowColDragging '& vbCrLf
         s = s & ", AllowColSorting := " & .AllowColSorting '& vbCrLf
         s = s & ", AllowDragAndSort := " & .AllowDragAndSort '& vbCrLf
@@ -29,7 +34,7 @@ Function GridSettingsType_Parse(ByVal s As String) As GridSettingsType
     's = Trim(s)
     'Dim sa1() As String: sa1 = Split(s, "=")
     'Dim sv As String: sv = sa1(1)
-    Dim t As GridSettingsType
+    Dim T As GridSettingsType
     If InStr(1, s, "GridSettingsType") Then
         Dim sa() As String: sa = Split(s, "{")
         Dim sv As String: sv = sa(1)
@@ -42,19 +47,19 @@ Function GridSettingsType_Parse(ByVal s As String) As GridSettingsType
                 va = Split(svs(i), ":=")
                 If UBound(va) > 0 Then
                     Select Case LCase(Trim(va(0)))
-                    Case "allowcoldragging": t.AllowColDragging = Trim(va(1))
-                    Case "allowcolsorting":  t.AllowColSorting = Trim(va(1))
-                    Case "allowdragandsort": t.AllowDragAndSort = Trim(va(1))
-                    Case "gridstyle":        t.GridStyle = Trim(va(1))
-                    Case "gridtype":         t.GridType = Trim(va(1))
-                    Case "headerbold":       t.HeaderBold = Trim(va(1))
-                    Case "shadealtcols":     t.ShadeAltCols = Trim(va(1))
-                    Case "shadealtrows":     t.ShadeAltRows = Trim(va(1))
+                    Case "allowcoldragging": T.AllowColDragging = Trim(va(1))
+                    Case "allowcolsorting":  T.AllowColSorting = Trim(va(1))
+                    Case "allowdragandsort": T.AllowDragAndSort = Trim(va(1))
+                    Case "gridstyle":        T.GridStyle = Trim(va(1))
+                    Case "gridtype":         T.GridType = Trim(va(1))
+                    Case "headerbold":       T.HeaderBold = Trim(va(1))
+                    Case "shadealtcols":     T.ShadeAltCols = Trim(va(1))
+                    Case "shadealtrows":     T.ShadeAltRows = Trim(va(1))
                     End Select
                 End If
             Next
         End If
     End If
-    GridSettingsType_Parse = t
+    GridSettingsType_Parse = T
 End Function
 

@@ -4,7 +4,7 @@ Begin VB.Form Form1
    ClientHeight    =   7335
    ClientLeft      =   120
    ClientTop       =   465
-   ClientWidth     =   11910
+   ClientWidth     =   12015
    BeginProperty Font 
       Name            =   "Consolas"
       Size            =   9.75
@@ -17,10 +17,19 @@ Begin VB.Form Form1
    Icon            =   "Form1.frx":0000
    LinkTopic       =   "Form1"
    ScaleHeight     =   7335
-   ScaleWidth      =   11910
+   ScaleWidth      =   12015
    StartUpPosition =   3  'Windows-Standard
    Begin VB.CommandButton BtnTestForEach 
       Caption         =   "Test For Each"
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
       Height          =   375
       Left            =   120
       TabIndex        =   34
@@ -29,14 +38,32 @@ Begin VB.Form Form1
    End
    Begin VB.CommandButton BtnInfo 
       Caption         =   "Info"
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
       Height          =   375
-      Left            =   2640
+      Left            =   3360
       TabIndex        =   33
       Top             =   120
-      Width           =   855
+      Width           =   1215
    End
    Begin VB.CommandButton BtnTestvbWChar 
       Caption         =   "Test vbWChar"
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
       Height          =   375
       Left            =   1800
       TabIndex        =   31
@@ -45,6 +72,15 @@ Begin VB.Form Form1
    End
    Begin VB.CommandButton BtnTestSelect2 
       Caption         =   "Test Select2"
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
       Height          =   375
       Left            =   1800
       TabIndex        =   30
@@ -53,6 +89,15 @@ Begin VB.Form Form1
    End
    Begin VB.CommandButton BtnTestSelect1 
       Caption         =   "Test Select1"
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
       Height          =   375
       Left            =   120
       TabIndex        =   29
@@ -62,118 +107,226 @@ Begin VB.Form Form1
    Begin VB.TextBox TxtCount 
       Alignment       =   1  'Rechts
       Height          =   345
-      Left            =   1440
+      Left            =   1920
       TabIndex        =   27
       ToolTipText     =   "The initial capacity of the inner array"
       Top             =   1320
-      Width           =   2055
+      Width           =   2655
    End
    Begin VB.ListBox List1 
       Height          =   6135
-      Left            =   3600
+      Left            =   4680
       TabIndex        =   0
       Top             =   960
       Width           =   7215
    End
    Begin VB.CommandButton BtnBack 
       Caption         =   "< Back"
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
       Height          =   375
-      Left            =   9600
+      Left            =   10680
       TabIndex        =   26
       Top             =   480
       Width           =   1215
    End
    Begin VB.ListBox List2 
       Height          =   5010
-      Left            =   3600
+      Left            =   4680
       TabIndex        =   25
       Top             =   960
       Width           =   7215
    End
    Begin VB.CommandButton BtnClone 
       Caption         =   "Clone >"
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
       Height          =   375
-      Left            =   9600
+      Left            =   10680
       TabIndex        =   24
       Top             =   120
       Width           =   1215
    End
    Begin VB.CommandButton BtnSortDown 
       Caption         =   "Sort v"
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
       Height          =   375
-      Left            =   8400
+      Left            =   9480
       TabIndex        =   23
       Top             =   480
       Width           =   1215
    End
    Begin VB.CommandButton BtnSortUp 
       Caption         =   "Sort ^"
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
       Height          =   375
-      Left            =   8400
+      Left            =   9480
       TabIndex        =   22
       Top             =   120
       Width           =   1215
    End
    Begin VB.CommandButton BtnMoveDown 
       Caption         =   "Move v"
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
       Height          =   375
-      Left            =   7200
+      Left            =   8280
       TabIndex        =   18
       Top             =   480
       Width           =   1215
    End
    Begin VB.CommandButton BtnClearAll 
       Caption         =   "ClearAll"
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
       Height          =   375
-      Left            =   6000
+      Left            =   7080
       TabIndex        =   21
       Top             =   480
       Width           =   1215
    End
    Begin VB.CommandButton BtnSearch 
       Caption         =   "Search"
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
       Height          =   375
-      Left            =   4800
+      Left            =   5880
       TabIndex        =   20
       Top             =   480
       Width           =   1215
    End
    Begin VB.CommandButton BtnDelete 
       Caption         =   "Delete"
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
       Height          =   375
-      Left            =   3600
+      Left            =   4680
       TabIndex        =   19
       Top             =   480
       Width           =   1215
    End
    Begin VB.CommandButton BtnMoveUp 
       Caption         =   "Move ^"
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
       Height          =   375
-      Left            =   7200
+      Left            =   8280
       TabIndex        =   17
       Top             =   120
       Width           =   1215
    End
    Begin VB.CommandButton BtnInsert 
       Caption         =   "Insert"
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
       Height          =   375
-      Left            =   6000
+      Left            =   7080
       TabIndex        =   16
       Top             =   120
       Width           =   1215
    End
    Begin VB.CommandButton BtnEdit 
       Caption         =   "Edit"
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
       Height          =   375
-      Left            =   4800
+      Left            =   5880
       TabIndex        =   15
       Top             =   120
       Width           =   1215
    End
    Begin VB.CommandButton BtnAdd 
       Caption         =   "Add"
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
       Height          =   375
-      Left            =   3600
+      Left            =   4680
       TabIndex        =   14
       Top             =   120
       Width           =   1215
@@ -181,40 +334,49 @@ Begin VB.Form Form1
    Begin VB.TextBox TxtGrowSize 
       Alignment       =   1  'Rechts
       Height          =   345
-      Left            =   1440
+      Left            =   1920
       TabIndex        =   12
       ToolTipText     =   "Growing either by factor or by chunksize, or both."
       Top             =   2400
-      Width           =   2055
+      Width           =   2655
    End
    Begin VB.TextBox TxtGrowRate 
       Alignment       =   1  'Rechts
       Height          =   345
-      Left            =   1440
+      Left            =   1920
       TabIndex        =   10
       ToolTipText     =   "Growing either by factor or by chunksize, or both."
       Top             =   2040
-      Width           =   2055
+      Width           =   2655
    End
    Begin VB.ComboBox CmbIsHashed 
       Height          =   345
-      Left            =   1440
+      Left            =   1920
       TabIndex        =   8
       Text            =   "True/False"
       Top             =   960
-      Width           =   2055
+      Width           =   2655
    End
    Begin VB.TextBox TxtCapacity 
       Alignment       =   1  'Rechts
       Height          =   345
-      Left            =   1440
+      Left            =   1920
       TabIndex        =   7
       ToolTipText     =   "The initial capacity of the inner array"
       Top             =   1680
-      Width           =   2055
+      Width           =   2655
    End
    Begin VB.CommandButton BtnTestWhere 
       Caption         =   "Test Where"
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
       Height          =   375
       Left            =   120
       TabIndex        =   3
@@ -223,21 +385,39 @@ Begin VB.Form Form1
    End
    Begin VB.CommandButton BtnCreate 
       Caption         =   "Create Random List"
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
       Height          =   375
       Left            =   120
       TabIndex        =   2
       Top             =   120
-      Width           =   2535
+      Width           =   3135
    End
    Begin VB.ComboBox CmbDataType 
       Height          =   345
-      Left            =   1440
+      Left            =   1920
       TabIndex        =   1
       Top             =   600
-      Width           =   2055
+      Width           =   2655
    End
    Begin VB.Label Label8 
       Caption         =   "Test functions similar to Linq:"
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
       Height          =   255
       Left            =   120
       TabIndex        =   32
@@ -245,12 +425,22 @@ Begin VB.Form Form1
       Width           =   3255
    End
    Begin VB.Label Label7 
+      AutoSize        =   -1  'True
       Caption         =   "Count:"
-      Height          =   255
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   240
       Left            =   120
       TabIndex        =   28
       Top             =   1320
-      Width           =   1095
+      Width           =   570
    End
    Begin VB.Label Label6 
       AutoSize        =   -1  'True
@@ -262,44 +452,94 @@ Begin VB.Form Form1
       Width           =   1155
    End
    Begin VB.Label Label5 
+      AutoSize        =   -1  'True
       Caption         =   "GrowSize:"
-      Height          =   255
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   240
       Left            =   120
       TabIndex        =   11
       Top             =   2400
-      Width           =   1095
+      Width           =   885
    End
    Begin VB.Label Label4 
+      AutoSize        =   -1  'True
       Caption         =   "GrowRate:"
-      Height          =   255
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   240
       Left            =   120
       TabIndex        =   9
       Top             =   2040
-      Width           =   1095
+      Width           =   915
    End
    Begin VB.Label Label3 
+      AutoSize        =   -1  'True
       Caption         =   "Capacity:"
-      Height          =   255
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   240
       Left            =   120
       TabIndex        =   6
       Top             =   1680
-      Width           =   1095
+      Width           =   795
    End
    Begin VB.Label Label2 
+      AutoSize        =   -1  'True
       Caption         =   "IsHashed:"
-      Height          =   255
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   240
       Left            =   120
       TabIndex        =   5
       Top             =   960
-      Width           =   1095
+      Width           =   855
    End
    Begin VB.Label Label1 
+      AutoSize        =   -1  'True
       Caption         =   "Datatype:"
-      Height          =   255
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   210
       Left            =   120
       TabIndex        =   4
       Top             =   600
-      Width           =   1095
+      Width           =   810
    End
 End
 Attribute VB_Name = "Form1"
@@ -319,21 +559,25 @@ Private Sub BtnTestForEach_Click()
     MsgBox "Clearing the listbox"
     List1.Clear
     MsgBox "Running through the list by using For Each and filling the listbox again."
-    Dim v, o As Object
+    Dim V, o As Object
     If m_List.DataType = vbObject Then
-        For Each v In m_List.GetEnumerator
-            Set o = v
+        For Each V In m_List.GetEnumerator
+            Set o = V
             List1.AddItem o.ToStr
         Next
     Else
-        For Each v In m_List.GetEnumerator
-            List1.AddItem v
+        If m_List.Count = 0 Then
+            MsgBox "List is empty, can not proceed!"
+            Exit Sub
+        End If
+        For Each V In m_List.GetEnumerator
+            List1.AddItem CStr(V)
         Next
     End If
 End Sub
 
 Private Sub Form_Load()
-    'Set m_List = New List
+    Me.Caption = Me.Caption & " v" & App.Major & "." & App.Minor & "." & App.Revision
     EDataType_ToCombo CmbDataType, Empty
     CmbDataType.ListIndex = 0
     Boolean_ToCombo CmbIsHashed
@@ -355,6 +599,7 @@ Sub EnableCtrls(bEnabled As Boolean)
     Me.BtnSortUp.Enabled = bEnabled
     'Me.BtnBack.Enabled = bEnabled
 End Sub
+
 Sub Boolean_ToCombo(aCmb As ComboBox)
     aCmb.Clear
     aCmb.AddItem ""
@@ -395,7 +640,7 @@ Private Sub BtnCreate_Click()
     End If
     EnableCtrls True
     AddRandom Count
-    List1.Clear
+    'List1.Clear
     
 '    If Len(CmbDataType.Text) = 0 Then CmbDataType.Text = m_List.GetType
 '    If Len(CmbIsHashed.Text) = 0 Then CmbIsHashed.Text = m_List.IsHashed
@@ -420,33 +665,46 @@ Sub AddRandom(nCount As Long)
     Dim i As Long, u As Long: u = IIf(nCount, nCount - 1, 10 + Rnd * 40) 'zw 10 und 50 Elemente
     Dim Arr
     Select Case dt
-    Case vbInteger:  ReDim Arr(0 To u) As Integer
-                     For i = 0 To u: Arr(i) = Rnd * 65535 - 32768: Next
-    Case vbLong:     ReDim Arr(0 To u) As Long
-                     For i = 0 To u: Arr(i) = (Rnd - 0.5) * 2 * 2147483647: Next
-    Case vbSingle:   ReDim Arr(0 To u) As Single
-                     For i = 0 To u: Arr(i) = (Rnd - 0.5) * 2 * 1000000: Next
-    Case vbDouble:   ReDim Arr(0 To u) As Double
-                     For i = 0 To u: Arr(i) = (Rnd - 0.5) * 2 * 100000000000#: Next
-    Case vbCurrency: ReDim Arr(0 To u) As Currency
-                     For i = 0 To u: Arr(i) = (Rnd - 0.5) * 2 * 100000000000#: Next
-    Case vbDate:     ReDim Arr(0 To u) As Date
-                     For i = 0 To u: Arr(i) = Now - CDate(Rnd * 100): Next
-    Case vbBoolean:  ReDim Arr(0 To u) As Boolean
-                     For i = 0 To u: Arr(i) = CBool(Max((Rnd - 0.5), 0)): Next
-    Case vbByte:     ReDim Arr(0 To u) As Byte
-                     For i = 0 To u: Arr(i) = (Rnd) * 255: Next
-    Case vbDecimal:  ReDim Arr(0 To u)
-                     For i = 0 To u: Arr(i) = CDec(Rnd * CDec(16777216)): Next
-    Case vbString:   ReDim Arr(0 To u) As String
-                     For i = 0 To u: Arr(i) = MNew.RndName: Next
-    Case vbWChar:    Arr = "Dies ist ein Teststring"
+    Case EDataType.vbInteger, EDataType.vbUInteger:
+                        ReDim Arr(0 To u) As Integer
+                        For i = 0 To u: Arr(i) = Rnd * 65535 - 32768: Next
+    Case EDataType.vbLong, EDataType.vbULong:
+                        ReDim Arr(0 To u) As Long
+                        For i = 0 To u: Arr(i) = (Rnd - 0.5) * 2 * 2147483647: Next
+    Case EDataType.vbSingle:
+                        ReDim Arr(0 To u) As Single
+                        For i = 0 To u: Arr(i) = (Rnd - 0.5) * 2 * 1000000: Next
+    Case EDataType.vbDouble:
+                        ReDim Arr(0 To u) As Double
+                        For i = 0 To u: Arr(i) = (Rnd - 0.5) * 2 * 100000000000#: Next
+    Case EDataType.vbCurrency, EDataType.vbLongLong, EDataType.vbULongLong:
+                        ReDim Arr(0 To u) As Currency
+                        For i = 0 To u: Arr(i) = (Rnd - 0.5) * 2 * 100000000000#: Next
+    Case EDataType.vbDate:
+                        ReDim Arr(0 To u) As Date
+                        For i = 0 To u: Arr(i) = Now - CDate(Rnd * 100): Next
+    Case EDataType.vbBoolean:
+                        ReDim Arr(0 To u) As Boolean
+                        For i = 0 To u: Arr(i) = CBool(Max((Rnd - 0.5), 0)): Next
+    Case EDataType.vbByte, EDataType.vbSByte:
+                        ReDim Arr(0 To u) As Byte
+                        For i = 0 To u: Arr(i) = (Rnd) * 255: Next
+    Case vbDecimal:
+                        ReDim Arr(0 To u)
+                        For i = 0 To u: Arr(i) = CDec(Rnd * CDec(16777216)): Next
+    Case vbString:
+                        ReDim Arr(0 To u) As String
+                        For i = 0 To u: Arr(i) = MNew.RndName: Next
+    Case vbWChar:
+                        Arr = "Dies ist ein Teststring"
     Case vbUserDefinedType:
-                     ReDim Arr(0 To u) As GridSettingsType
-                     For i = 0 To u: Arr(i) = MNew.GridSettingsTypeRnd: Next
-    Case vbObject:   ReDim Arr(0 To u) As Person
-                     For i = 0 To u: Set Arr(i) = MNew.PersonRnd: Next
-    Case vbVariant:  Arr = Array(1, "eins", 123456789, 123.456798, PersonRnd, Now)
+                        ReDim Arr(0 To u) As GridSettingsType
+                        For i = 0 To u: Arr(i) = MNew.GridSettingsTypeRnd: Next
+    Case vbObject:
+                        ReDim Arr(0 To u) As Person
+                        For i = 0 To u: Set Arr(i) = MNew.PersonRnd: Next
+    Case vbVariant:
+                        Arr = Array(1, "eins", 123456789, 123.456798, PersonRnd, Now)
     End Select
     m_List.AddRange Arr
 End Sub
@@ -485,7 +743,11 @@ Sub UpdateView(Optional OnlyInfo As Boolean = False)
     With m_List
         Dim i As Long: i = List1.ListIndex
         List1.Clear
-        .ToListbox List1
+        If .DataType = vbUserDefinedType Then
+            .ToListbox List1, , New lambdas, "GridSettingsTypeToStr"
+        Else
+            .ToListbox List1
+        End If
         If i < List1.ListCount Then
             List1.ListIndex = i
         End If
@@ -585,13 +847,13 @@ Private Sub BtnEdit_Click()
 Try: On Error GoTo Catch
     Dim i As Long:   i = LBGetListIndex(List1)
     Dim s As String
-    Dim v
+    Dim V
     Select Case m_List.DataType
     Case vbObject:  s = m_List.Item(i).ToStr
     Case vbVariant: 'v = m_List.Item(i)
                     If VarType(m_List.Item(i)) = vbObject Then
-                        Set v = m_List.Item(i)
-                        s = v.ToStr
+                        Set V = m_List.Item(i)
+                        s = V.ToStr
                     Else
                         s = m_List.Item(i)
                     End If
@@ -710,7 +972,7 @@ End Sub
 Sub List2Show(bShow As Boolean)
     Dim brdr As Single: brdr = 8 * Screen.TwipsPerPixelX
     Dim L As Single: L = List1.Left
-    Dim t As Single: t = List1.Top
+    Dim T As Single: T = List1.Top
     Dim W As Single: W = List1.Width
     Dim H As Single: H = List1.Height
     If bShow Then
@@ -719,7 +981,7 @@ Sub List2Show(bShow As Boolean)
     Else
         List1.ZOrder 0
     End If
-    If W > 0 And H > 0 Then List2.Move L, t, W, H
+    If W > 0 And H > 0 Then List2.Move L, T, W, H
 End Sub
 Private Sub BtnBack_Click()
     Set m_ListClone = Nothing
@@ -731,17 +993,17 @@ End Sub
 Private Sub Form_Resize()
     Dim brdr As Single: brdr = 8 * Screen.TwipsPerPixelX
     Dim L As Single: L = List1.Left
-    Dim t As Single: t = List1.Top
-    Dim W As Single: W = List1.Width
+    Dim T As Single: T = List1.Top
+    Dim W As Single: W = Me.ScaleWidth - L - brdr 'List1.Width
     Dim H As Single: H = Me.ScaleHeight - List1.Top - brdr
     If W > 0 And H > 0 Then
-        List1.Move L, t, W, H
-        List2.Move L, t, W, H
+        List1.Move L, T, W, H
+        List2.Move L, T, W, H
     End If
     If BtnBack.Enabled Then
         L = L + W + brdr
         'W = L + W + 8 * Screen.TwipsPerPixelX
-        If W > 0 And H > 0 Then List2.Move L, t, W, H
+        If W > 0 And H > 0 Then List2.Move L, T, W, H
     End If
 End Sub
 
@@ -760,17 +1022,6 @@ Private Sub List1_KeyUp(KeyCode As Integer, Shift As Integer)
         List1.ListIndex = i
     End If
 End Sub
-
-
-
-
-
-
-
-
-
-
-
 
 Private Sub BtnTestWhere_Click()
 '6 * Filtern:

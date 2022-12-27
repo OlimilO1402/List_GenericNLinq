@@ -36,3 +36,7 @@ End Function
 Public Function var_beginswith_A(var As String) As Boolean
     var_beginswith_A = Left(var, 1) = "A"
 End Function
+
+Public Function GridSettingsTypeToStr(V) As String
+    GridSettingsTypeToStr = MUdt.GridSettingsTypeToStr(V)
+End Function
