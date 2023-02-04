@@ -98,7 +98,9 @@ End Sub
 
 Private Sub Class_Terminate()
     If (m_DataType And vbByRef) = vbByRef Then RtlZeroMemory ByVal VarPtr(m_Arr), 16
-    Erase m_Arr
+    'If Not IsEmpty(m_Arr) Then
+        If IsArray(m_Arr) And m_Count > 0 Then Erase m_Arr
+    'End If
 End Sub
 
 Friend Sub New_(Of_T As EDataType, _
