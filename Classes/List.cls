@@ -400,10 +400,10 @@ End Property
 Public Sub AddRange(aArr) 'As List
     ' Fügt die Elemente der angegebenen Auflistung der List hinzu
     If VBA.Information.IsEmpty(aArr) Then Exit Sub
-    Dim i As Long, V
+    Dim i As Long, v
     If TypeOf aArr Is List Then
-        For Each V In aArr.GetEnumerator
-            Me.Add V
+        For Each v In aArr.GetEnumerator
+            Me.Add v
         Next
     Else
         If m_DataType = vbWChar Then
@@ -424,13 +424,13 @@ Public Sub AddRange(aArr) 'As List
             End If
         ElseIf m_DataType = vbUserDefinedType Then
             For i = 0 To UBound(aArr)
-                V = aArr(i)
-                Me.Add V
+                v = aArr(i)
+                Me.Add v
             Next
         Else
             'für Collection oder Array
-            For Each V In aArr
-                Me.Add V
+            For Each v In aArr
+                Me.Add v
             Next
         End If
     End If
@@ -1109,7 +1109,7 @@ Private Sub SwapVar(ByVal i1 As Long, ByVal i2 As Long)
     m_Arr(i1) = m_Arr(i2): m_Arr(i2) = tmp
 End Sub
 
-' Die Rekursive datenunabhängige Methode QuickSort
+' Die Rekursive datenunabhängige Methode QuickSort für Strings
 Private Sub QuickSortStr(ByVal i1 As Long, ByVal i2 As Long)
     Dim T As Long
     If i2 > i1 Then
