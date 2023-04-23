@@ -1168,7 +1168,10 @@ Private Function divideObj(ByVal i1 As Long, ByVal i2 As Long) As Long
     divideObj = i
 End Function
 Private Function CompareObj(ByVal i1 As Long, ByVal i2 As Long) As Long
-    CompareObj = m_Arr(i1).Compare(m_Arr(i2))
+    Dim obj1 As Object: Set obj1 = m_Arr(i1)
+    Dim obj2 As Object: Set obj2 = m_Arr(i2)
+    'CompareObj = m_Arr(i1).Compare(m_Arr(i2))
+    CompareObj = obj1.Compare(obj2)
 End Function
 Private Sub SwapObj(ByVal i1 As Long, ByVal i2 As Long)
     Dim tmp As Object: Set tmp = m_Arr(i1)
