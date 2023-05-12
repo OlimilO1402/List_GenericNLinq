@@ -455,7 +455,7 @@ Public Sub Clear()
     'm_bytLen = 0
     'm_Capacity = 0
     Set m_HashI = Nothing
-    m_IsHashed = False
+    'm_IsHashed = False 'maybe let this as it is 'om 2023-05-10
     Class_Initialize
     ReDim m_Arr(0 To m_Capacity - 1)
 End Sub
