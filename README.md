@@ -3,7 +3,7 @@
 
 [![GitHub](https://img.shields.io/github/license/OlimilO1402/Bmp_ScreenshotToPdf?style=plastic)](https://github.com/OlimilO1402/List_GenericNLinq/blob/master/LICENSE) 
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/OlimilO1402/List_GenericNLinq?style=plastic)](https://github.com/OlimilO1402/List_GenericNLinq/releases/latest)
-[![Github All Releases](https://img.shields.io/github/downloads/OlimilO1402/List_GenericNLinq/total.svg)](https://github.com/OlimilO1402/List_GenericNLinq/releases/download/v1.0.6/GenericListNLinq_v1.0.6.zip)
+[![Github All Releases](https://img.shields.io/github/downloads/OlimilO1402/List_GenericNLinq/total.svg)](https://github.com/OlimilO1402/List_GenericNLinq/releases/download/v2023.11.25/GenericListNLinq_v2023.11.25.zip)
 [![Follow](https://img.shields.io/github/followers/OlimilO1402.svg?style=social&label=Follow&maxAge=2592000)](https://github.com/OlimilO1402/List_GenericNLinq/watchers)
 
 a para-generic list-class in VBC.  

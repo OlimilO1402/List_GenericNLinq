@@ -1,10 +1,10 @@
 VERSION 5.00
 Begin VB.Form Form1 
    Caption         =   "Generic List And Linq"
-   ClientHeight    =   7335
+   ClientHeight    =   7710
    ClientLeft      =   120
    ClientTop       =   465
-   ClientWidth     =   12015
+   ClientWidth     =   13215
    BeginProperty Font 
       Name            =   "Consolas"
       Size            =   9.75
@@ -16,9 +16,43 @@ Begin VB.Form Form1
    EndProperty
    Icon            =   "Form1.frx":0000
    LinkTopic       =   "Form1"
-   ScaleHeight     =   7335
-   ScaleWidth      =   12015
+   ScaleHeight     =   7710
+   ScaleWidth      =   13215
    StartUpPosition =   3  'Windows-Standard
+   Begin VB.CommandButton BtnQueue 
+      Caption         =   "Queue"
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   375
+      Left            =   11880
+      TabIndex        =   36
+      Top             =   480
+      Width           =   1215
+   End
+   Begin VB.CommandButton BtnStack 
+      Caption         =   "Stack"
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   375
+      Left            =   11880
+      TabIndex        =   35
+      Top             =   120
+      Width           =   1215
+   End
    Begin VB.CommandButton BtnTestForEach 
       Caption         =   "Test For Each"
       BeginProperty Font 
@@ -114,11 +148,11 @@ Begin VB.Form Form1
       Width           =   2655
    End
    Begin VB.ListBox List1 
-      Height          =   6135
+      Height          =   6585
       Left            =   4680
       TabIndex        =   0
       Top             =   960
-      Width           =   7215
+      Width           =   8535
    End
    Begin VB.CommandButton BtnBack 
       Caption         =   "< Back"
@@ -1270,3 +1304,115 @@ Sub TestList1()
     
     'debug.Print mylist.Count
 End Sub
+
+
+Private Sub BtnStack_Click()
+    
+    Randomize
+    
+    'a Stack is like a stack of paper, like a FiLo First-in-Last-out
+    'you push a new page on top,
+    'you peek the last page from the top,
+    'you pop  the last page from the top, the last page gets remeoved from the top of the stack
+    'you have no ability to access the first page until you pop all pages down to the first page
+    '
+    List1.Clear
+    Dim st As Stack: Set st = MNew.Stack(vbObject)
+    Dim p1 As Person, p2 As Person
+    
+    Set p1 = MNew.PersonRnd
+    List1.AddItem "p1 = New Person(Name:=" & p1.Name & ")"
+    
+    List1.AddItem "Stack.Push p1"
+    st.Push p1
+    
+    List1.AddItem "p2 = Stack.Peek"
+    Set p2 = st.Peek
+    List1.AddItem "p2.Name = " & p2.Name
+    
+    Set p1 = MNew.PersonRnd
+    List1.AddItem "p1 = New Person(Name:=" & p1.Name & ")"
+    
+    List1.AddItem "Stack.Push p1"
+    st.Push p1
+    
+    List1.AddItem "p2 = Stack.Peek"
+    Set p2 = st.Peek
+    List1.AddItem "p2.Name = " & p2.Name
+    
+    Set p1 = MNew.PersonRnd
+    st.Push p1
+    List1.AddItem "Stack.Push New Person(Name:=" & p1.Name & ")"
+    
+    Set p1 = MNew.PersonRnd
+    st.Push p1
+    List1.AddItem "Stack.Push New Person(Name:=" & p1.Name & ")"
+    
+    Set p1 = MNew.PersonRnd
+    st.Push p1
+    List1.AddItem "Stack.Push New Person(Name:=" & p1.Name & ")"
+        
+    List1.AddItem "Stack.Count=" & st.Count
+    
+    Set p2 = st.Pop
+    List1.AddItem "p2 = Stack.Pop: p2.Name=" & p2.Name
+    List1.AddItem "Stack.Count=" & st.Count
+    
+    Set p2 = st.Pop
+    List1.AddItem "p2 = Stack.Pop: p2.Name=" & p2.Name
+    List1.AddItem "Stack.Count=" & st.Count
+    
+    Set p2 = st.Pop
+    List1.AddItem "p2 = Stack.Pop: p2.Name=" & p2.Name
+    List1.AddItem "Stack.Count=" & st.Count
+    
+    Set p2 = st.Pop
+    List1.AddItem "p2 = Stack.Pop: p2.Name=" & p2.Name
+    List1.AddItem "Stack.Count=" & st.Count
+    
+    Set p2 = st.Pop
+    List1.AddItem "p2 = Stack.Pop: p2.Name=" & p2.Name
+    List1.AddItem "Stack.Count=" & st.Count
+    
+End Sub
+
+Private Sub BtnQueue_Click()
+    Randomize
+    
+    'a Queue is like a billardstick, like a cache, like a waiting line, like a FiFo First-in-First-out
+    
+    Dim qu As Queue: Set qu = MNew.Queue(vbObject)
+    Dim p1 As Person, p2 As Person
+    
+    Set p1 = MNew.PersonRnd
+    MsgBox "New Person p1, Name=" & p1.Name
+    qu.Enqueue p1
+    MsgBox "Queue.Enqueue p1"
+    Set p2 = qu.Peek
+    MsgBox "p2 = Queue.Peek: p2.Name = " & p2.Name
+    
+    Set p1 = MNew.PersonRnd
+    MsgBox "New Person p1, Name=" & p1.Name
+    qu.Enqueue p1
+    MsgBox "Queue.Enqueue p1"
+    Set p2 = qu.Peek
+    MsgBox "p2 = Queue.Peek: p2.Name = " & p2.Name
+    
+    Set p1 = MNew.PersonRnd
+    MsgBox "New Person p1, Name=" & p1.Name
+    qu.Enqueue p1
+    MsgBox "Queue.Enqueue p1"
+    Set p2 = qu.Peek
+    MsgBox "p2 = Queue.Peek: p2.Name = " & p2.Name
+    
+    Set p1 = MNew.PersonRnd
+    MsgBox "New Person p1, Name=" & p1.Name
+    qu.Enqueue p1
+    MsgBox "Queue.Enqueue p1"
+    Set p2 = qu.Peek
+    MsgBox "p2 = Queue.Peek: p2.Name = " & p2.Name
+    
+    MsgBox "Queue.Count: " & qu.Count
+    
+End Sub
+

@@ -12,6 +12,15 @@ Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
+#If ListAsStack Then
+Implements Stack
+#End If
+#If ListAsQueue Then
+Implements Queue
+#End If
+
+
+
 'https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-oaut/3fe7db9f-5803-4dc4-9d14-5425d3f5461f
 ' typedef  enum tagVARENUM
 ' {
@@ -400,10 +409,10 @@ End Property
 Public Sub AddRange(aArr) 'As List
     ' Fügt die Elemente der angegebenen Auflistung der List hinzu
     If VBA.Information.IsEmpty(aArr) Then Exit Sub
-    Dim i As Long, v
+    Dim i As Long, V
     If TypeOf aArr Is List Then
-        For Each v In aArr.GetEnumerator
-            Me.Add v
+        For Each V In aArr.GetEnumerator
+            Me.Add V
         Next
     Else
         If m_DataType = vbWChar Then
@@ -424,13 +433,13 @@ Public Sub AddRange(aArr) 'As List
             End If
         ElseIf m_DataType = vbUserDefinedType Then
             For i = 0 To UBound(aArr)
-                v = aArr(i)
-                Me.Add v
+                V = aArr(i)
+                Me.Add V
             Next
         Else
             'für Collection oder Array
-            For Each v In aArr
-                Me.Add v
+            For Each V In aArr
+                Me.Add V
             Next
         End If
     End If
@@ -465,10 +474,10 @@ Public Function Clone() As List
     Set Clone = New List: Clone.NewC Me
 End Function
 
-Public Function ContainsEqualObj(obj As Object) As Boolean
+Public Function ContainsEqualObj(Obj As Object) As Boolean
     Dim i As Long
     For i = 0 To m_Count - 1
-        If m_Arr(i).Equals(obj) Then
+        If m_Arr(i).Equals(Obj) Then
             ContainsEqualObj = True: Exit Function
         End If
     Next
@@ -495,12 +504,12 @@ Public Function ContainsKey(Key As String) As Boolean
     On Error GoTo 0
 End Function
 
-Public Function ContainsObj(obj, Optional ByVal ObjUseKey As Boolean = False) As Boolean
+Public Function ContainsObj(Obj, Optional ByVal ObjUseKey As Boolean = False) As Boolean
     'Bestimmt, ob sich ein Element in der Liste befindet.
     On Error Resume Next
     Dim Key As String
     If m_IsHashed Then
-        If m_DataType = vbObject Then Key = obj.Key Else Key = obj
+        If m_DataType = vbObject Then Key = Obj.Key Else Key = Obj
         If VBA.IsEmpty(m_HashI(Key)) Then: 'DoNothing
         ContainsObj = (Err.Number = 0)
     Else
@@ -513,7 +522,7 @@ Public Function ContainsObj(obj, Optional ByVal ObjUseKey As Boolean = False) As
                     If m_Arr(i).Key = Key Then ContainsObj = True: Exit Function
                 Next
             Else
-                Dim pObj As Long: pObj = ObjPtr(obj)
+                Dim pObj As Long: pObj = ObjPtr(Obj)
                 For i = 0 To m_Count - 1
                     If ObjPtr(m_Arr(i)) = pObj Then ContainsObj = True: Exit Function
                 Next
@@ -524,7 +533,7 @@ Public Function ContainsObj(obj, Optional ByVal ObjUseKey As Boolean = False) As
             'Key = Obj
             For i = 0 To m_Count - 1
                 'If CStr(m_Arr(i)) = Key Then Contains = True: Exit Function
-                If m_Arr(i) = obj Then ContainsObj = True: Exit Function
+                If m_Arr(i) = Obj Then ContainsObj = True: Exit Function
             Next
         End Select
     End If
@@ -535,6 +544,10 @@ Public Property Get Count() As Long
     'Ruft die Anzahl der Elemente ab, die in der List enthalten sind.
     Count = m_Count
 End Property
+
+Public Sub CopyTo(Arr())
+    Arr = m_Arr
+End Sub
 
 Public Function GetEnumerator() 'As Variant ' 'As IUnknown
 Attribute GetEnumerator.VB_UserMemId = -4
@@ -622,12 +635,12 @@ Public Property Get ItemByKey(aKey As String)
 End Property
 
 Public Property Get IndexOf(Value) As Long
-    Dim i As Long, obj As Object
+    Dim i As Long, Obj As Object
     IndexOf = -1 'first we assume its not in list
     If m_IsHashed Then
         Dim Key As String
         Select Case m_DataType
-        Case vbObject: Set obj = Value: Key = obj.Key
+        Case vbObject: Set Obj = Value: Key = Obj.Key
         Case vbString: Key = Value
         Case Else:     Key = Value
         End Select
@@ -923,8 +936,8 @@ Public Sub Remove(ByVal Index As Long)
     If m_IsHashed Then ReInitIndices
 End Sub
 
-Public Sub RemoveObj(obj As Object)
-    Dim i As Long: i = IndexOf(obj)
+Public Sub RemoveObj(Obj As Object)
+    Dim i As Long: i = IndexOf(Obj)
     'if Obj is not contained IndexOf returns -1
     If i < 0 Then Exit Sub
     Remove i
@@ -1168,10 +1181,10 @@ Private Function divideObj(ByVal i1 As Long, ByVal i2 As Long) As Long
     divideObj = i
 End Function
 Private Function CompareObj(ByVal i1 As Long, ByVal i2 As Long) As Long
-    Dim obj1 As Object: Set obj1 = m_Arr(i1)
-    Dim obj2 As Object: Set obj2 = m_Arr(i2)
+    Dim Obj1 As Object: Set Obj1 = m_Arr(i1)
+    Dim Obj2 As Object: Set Obj2 = m_Arr(i2)
     'CompareObj = m_Arr(i1).Compare(m_Arr(i2))
-    CompareObj = obj1.Compare(obj2)
+    CompareObj = Obj1.Compare(Obj2)
 End Function
 Private Sub SwapObj(ByVal i1 As Long, ByVal i2 As Long)
     Dim tmp As Object: Set tmp = m_Arr(i1)
@@ -1840,3 +1853,91 @@ Private Function ErrHandler(ByVal FuncName As String, _
     End If
 
 End Function
+
+' ############################## '    Implements Stack    ' ############################## '
+Private Sub Stack_Clear()
+    Me.Clear
+End Sub
+
+Private Function Stack_Clone() As Stack
+    Set Stack_Clone = Me.Clone
+End Function
+
+Private Function Stack_Contains(Obj As Object) As Boolean
+    Stack_Contains = Me.ContainsObj(Obj)
+End Function
+
+Private Sub Stack_CopyTo(Arr() As Variant)
+    Me.CopyTo Arr
+End Sub
+
+Private Property Get Stack_Count() As Long
+    Stack_Count = Me.Count
+End Property
+
+Private Function Stack_Peek() As Variant
+    'gibt das oberste Object vom Stack zurück ohne es zu entfernen
+    If m_DataType = vbObject Then
+        Set Stack_Peek = Me.SPeek
+    Else
+        Stack_Peek = Me.SPeek
+    End If
+End Function
+
+Private Function Stack_Pop() As Variant
+    'Entfernt das Object oben vom Stack und gibt es zurück
+    If m_DataType = vbObject Then
+        Set Stack_Pop = Me.SPop
+    Else
+        Stack_Peek = Me.SPop
+    End If
+End Function
+
+Private Sub Stack_Push(Obj As Variant)
+    'Fügt ein Object am Anfang des Stack ein
+    Me.SPush Obj
+End Sub
+
+' ############################## '    Implements Queue    ' ############################## '
+Private Sub Queue_Clear()
+    Me.Clear
+End Sub
+
+Private Function Queue_Clone() As Queue
+    Set Queue_Clone = Me.Clone
+End Function
+
+Private Function Queue_Contains(Obj) As Boolean
+    Queue_Contains = Me.ContainsObj(Obj)
+End Function
+
+Private Sub Queue_CopyTo(Arr() As Variant)
+    Me.CopyTo Arr
+End Sub
+
+Private Property Get Queue_Count() As Long
+    Queue_Count = Me.Count
+End Property
+
+Private Function Queue_Dequeue() As Variant
+    'Entfernt das Objekt am Anfang der Queue und gibt es zurück
+    If m_DataType = vbObject Then
+        Set Queue_Dequeue = Me.QDequeue
+    Else
+        Queue_Dequeue = Me.QDequeue
+    End If
+End Function
+
+Private Function Queue_Enqueue(Obj) As Variant
+    Me.QEnqueue Obj
+End Function
+
+Private Function Queue_Peek() As Variant
+    'gibt das Object am Anfang der Queue zurück ohne es zu entfernen
+    If m_DataType = vbObject Then
+        Set Queue_Peek = Me.QPeek
+    Else
+        Queue_Peek = Me.QPeek
+    End If
+End Function
+
