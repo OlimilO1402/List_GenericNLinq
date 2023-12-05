@@ -409,37 +409,37 @@ End Property
 Public Sub AddRange(aArr) 'As List
     ' Fügt die Elemente der angegebenen Auflistung der List hinzu
     If VBA.Information.IsEmpty(aArr) Then Exit Sub
-    Dim i As Long, V
+    Dim i As Long, v
     If TypeOf aArr Is List Then
-        For Each V In aArr.GetEnumerator
-            Me.Add V
+        For Each v In aArr.GetEnumerator
+            Me.Add v
         Next
     Else
         If m_DataType = vbWChar Then
             'für String
             If VarType(aArr) = vbString Then
                 Dim bl As Long: bl = LenB(aArr)
-                Dim L As Long: L = bl / 2
+                Dim l As Long: l = bl / 2
                 If m_IsHashed Then
-                    For i = 1 To L
+                    For i = 1 To l
                         Me.Add AscW(Mid$(aArr, i, 1))
                     Next
                 Else
-                    EnsureCapacity m_Count + L
+                    EnsureCapacity m_Count + l
                     Dim pDst As Long: pDst = DataPtrI(m_Count)
                     RtlMoveMemory ByVal pDst, ByVal StrPtr(aArr), bl
-                    m_Count = m_Count + L
+                    m_Count = m_Count + l
                 End If
             End If
         ElseIf m_DataType = vbUserDefinedType Then
             For i = 0 To UBound(aArr)
-                V = aArr(i)
-                Me.Add V
+                v = aArr(i)
+                Me.Add v
             Next
         Else
             'für Collection oder Array
-            For Each V In aArr
-                Me.Add V
+            For Each v In aArr
+                Me.Add v
             Next
         End If
     End If
@@ -1184,7 +1184,7 @@ Private Function CompareObj(ByVal i1 As Long, ByVal i2 As Long) As Long
     Dim Obj1 As Object: Set Obj1 = m_Arr(i1)
     Dim Obj2 As Object: Set Obj2 = m_Arr(i2)
     'CompareObj = m_Arr(i1).Compare(m_Arr(i2))
-    CompareObj = Obj1.Compare(Obj2)
+    CompareObj = Obj1.compare(Obj2)
 End Function
 Private Sub SwapObj(ByVal i1 As Long, ByVal i2 As Long)
     Dim tmp As Object: Set tmp = m_Arr(i1)
@@ -1859,7 +1859,7 @@ Private Sub Stack_Clear()
     Me.Clear
 End Sub
 
-Private Function Stack_Clone() As Stack
+Private Function Stack_Clone() 'As Stack
     Set Stack_Clone = Me.Clone
 End Function
 
@@ -1903,7 +1903,7 @@ Private Sub Queue_Clear()
     Me.Clear
 End Sub
 
-Private Function Queue_Clone() As Queue
+Private Function Queue_Clone() 'As Queue
     Set Queue_Clone = Me.Clone
 End Function
 
