@@ -13,10 +13,10 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 Public Sub Clear():                                 End Sub
-Public Function Clone() As Stack:                   End Function
-Public Function Contains(Obj As Object) As Boolean: End Function
+Public Function Clone() As Object:                  End Function
+Public Function Contains(obj As Object) As Boolean: End Function
 Public Sub CopyTo(Arr()):                           End Sub
 Public Property Get Count() As Long:                End Property
 Public Function Peek():                             End Function
 Public Function Pop():                              End Function
-Public Sub Push(Obj):                               End Sub
+Public Sub Push(obj):                               End Sub

@@ -158,17 +158,18 @@ End Function
 
 ' ListIndex von ListBox ermitteln
 ' Gibt den aktuell selektierten Index zurück
-Public Function LBGetListIndex(Obj As ListBox) As Long
-    LBGetListIndex = SendMessage(Obj.hwnd, LB_GETCURSEL, 0, ByVal 0&)
+Public Function LBGetListIndex(obj As ListBox) As Long
+    LBGetListIndex = SendMessage(obj.hwnd, LB_GETCURSEL, 0, ByVal 0&)
 End Function
 
 ' ListIndex von ListBox setzen
 ' setzt den ListIndex und markiert den Eintrag
 ' Ein Click wird nicht ausgelöst!
-Public Sub LBSetListIndex(Obj As ListBox, NewIndex As Long)
-    Call SendMessage(Obj.hwnd, LB_SETCURSEL, NewIndex, ByVal 0&)
+Public Sub LBSetListIndex(obj As ListBox, NewIndex As Long)
+    Call SendMessage(obj.hwnd, LB_SETCURSEL, NewIndex, ByVal 0&)
 End Sub
 
+'MSFlexGrid Wizard
 ' The GridSettingsType is just for testing the ability to list structure-types in ax-dlls
 Public Function GridSettingsTypeRnd() As GridSettingsType
     Randomize

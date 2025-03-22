@@ -15,9 +15,9 @@ Option Explicit
 #If ListAsStack Then
 Implements Stack
 #End If
-#If ListAsQueue Then
-Implements Queue
-#End If
+'#If ListAsQueue Then
+'Implements Queue
+'#End If
 
 
 
@@ -94,7 +94,7 @@ Dim m_LambFunc As String
 #Else
     Private Declare Sub RtlMoveMemory Lib "kernel32" (ByRef Dst As Any, ByRef src As Any, ByVal BytLen As Long)
     Private Declare Sub RtlZeroMemory Lib "kernel32" (ByRef Dst As Any, ByVal BytLen As Long)
-    Private Declare Function ArrPtr Lib "msvbvm60" Alias "VarPtr" (ByRef Arr() As Any) As Long
+    Private Declare Function ArrPtr Lib "msvbvm60" Alias "VarPtr" (ByRef arr() As Any) As Long
 #End If
 
 Private Sub Class_Initialize()
@@ -153,9 +153,9 @@ Friend Sub NewC(other As List)
     End With
 End Sub
 
-Private Sub InitGenericArray(T As EDataType)
+Private Sub InitGenericArray(t As EDataType)
     Dim u As Long: u = m_Capacity + 1
-    Select Case T
+    Select Case t
     Case EDataType.vbInteger:    ReDim m_Arr(0 To u) As Integer:   m_bytLen = 2
     Case EDataType.vbUInteger:   ReDim m_Arr(0 To u) As Integer:   m_bytLen = 2
     Case EDataType.vbLong:       ReDim m_Arr(0 To u) As Long:      m_bytLen = 4
@@ -185,7 +185,7 @@ Private Sub InitGenericArray(T As EDataType)
     'wait for Add
     'Case vbArray:
     Case Else 'Fehlermeldung ausgeben
-        MsgBox "Datatype not supported yet: " & EDataType_ToStr(T)
+        MsgBox "Datatype not supported yet: " & EDataType_ToStr(t)
     End Select
     'm_bytLen = LenB(m_Arr(0))
 End Sub
@@ -220,9 +220,9 @@ Friend Function GetType() As String
 End Function
 
 'Siehe auch Extra Projekt in der diese Funktion ausgiebig getestet wird
-Private Function EDataType_ToStr(T As EDataType) As String
+Private Function EDataType_ToStr(t As EDataType) As String
     Dim s As String
-    Select Case T
+    Select Case t
     Case vbInteger:         s = "Integer"    ' vbInteger    = 2
     Case vbLong:            s = "Long"       ' vbLong       = 3
     Case vbSingle:          s = "Single"     ' vbSingle     = 4
@@ -249,8 +249,8 @@ Private Function EDataType_ToStr(T As EDataType) As String
     Case vbWChar:           s = "WChar"
     'Case vbArray:      s = "Array"      ' vbArray      = 8192 (&H2000)
     Case Else:
-        If T And vbByRef Then s = "ByRef "
-        If T And vbArray Then s = "Array As " Else s = "Type still undefined"
+        If t And vbByRef Then s = "ByRef "
+        If t And vbArray Then s = "Array As " Else s = "Type still undefined"
     End Select
     EDataType_ToStr = s
 End Function
@@ -474,10 +474,10 @@ Public Function Clone() As List
     Set Clone = New List: Clone.NewC Me
 End Function
 
-Public Function ContainsEqualObj(Obj As Object) As Boolean
+Public Function ContainsEqualObj(obj As Object) As Boolean
     Dim i As Long
     For i = 0 To m_Count - 1
-        If m_Arr(i).Equals(Obj) Then
+        If m_Arr(i).Equals(obj) Then
             ContainsEqualObj = True: Exit Function
         End If
     Next
@@ -488,7 +488,7 @@ Public Function ContainsKey(Key As String) As Boolean
     On Error Resume Next
     If m_IsHashed Then
         If VBA.Information.IsEmpty(m_HashI(Key)) Then: 'DoNothing
-        ContainsKey = (Err.Number = 0)
+        ContainsKey = (Err.number = 0)
     Else
         Dim i As Long
         If m_DataType = vbObject Then
@@ -504,14 +504,14 @@ Public Function ContainsKey(Key As String) As Boolean
     On Error GoTo 0
 End Function
 
-Public Function ContainsObj(Obj, Optional ByVal ObjUseKey As Boolean = False) As Boolean
+Public Function ContainsObj(obj, Optional ByVal ObjUseKey As Boolean = False) As Boolean
     'Bestimmt, ob sich ein Element in der Liste befindet.
     On Error Resume Next
     Dim Key As String
     If m_IsHashed Then
-        If m_DataType = vbObject Then Key = Obj.Key Else Key = Obj
+        If m_DataType = vbObject Then Key = obj.Key Else Key = obj
         If VBA.IsEmpty(m_HashI(Key)) Then: 'DoNothing
-        ContainsObj = (Err.Number = 0)
+        ContainsObj = (Err.number = 0)
     Else
         Dim i As Long
         Select Case m_DataType
@@ -522,7 +522,7 @@ Public Function ContainsObj(Obj, Optional ByVal ObjUseKey As Boolean = False) As
                     If m_Arr(i).Key = Key Then ContainsObj = True: Exit Function
                 Next
             Else
-                Dim pObj As Long: pObj = ObjPtr(Obj)
+                Dim pObj As LongPtr: pObj = ObjPtr(obj)
                 For i = 0 To m_Count - 1
                     If ObjPtr(m_Arr(i)) = pObj Then ContainsObj = True: Exit Function
                 Next
@@ -533,7 +533,7 @@ Public Function ContainsObj(Obj, Optional ByVal ObjUseKey As Boolean = False) As
             'Key = Obj
             For i = 0 To m_Count - 1
                 'If CStr(m_Arr(i)) = Key Then Contains = True: Exit Function
-                If m_Arr(i) = Obj Then ContainsObj = True: Exit Function
+                If m_Arr(i) = obj Then ContainsObj = True: Exit Function
             Next
         End Select
     End If
@@ -545,19 +545,18 @@ Public Property Get Count() As Long
     Count = m_Count
 End Property
 
-Public Sub CopyTo(Arr())
-    Arr = m_Arr
+Public Sub CopyTo(arr())
+    arr = m_Arr
 End Sub
 
 Public Function GetEnumerator() 'As Variant ' 'As IUnknown
-Attribute GetEnumerator.VB_UserMemId = -4
     'Prozedur-ID = -4
     'Gibt einen Enumerator zurück, der die Liste durchläuft
     'this is the simple Enumerator created by VB so we have to crop the array to its used size
     Me.Trim
     'cropping the array after every add is stupid if you want to view the array after every change
     'if we do not want to crop the array, we have to implement our own Enumerator, where we set the size manually
-    GetEnumerator = m_Arr '() 'm_Arr() '.[_NewEnum]
+    GetEnumerator = m_Arr 'm_Arr() '.[_NewEnum]
 End Function
 
 Public Property Get UUBound() As Long
@@ -635,12 +634,12 @@ Public Property Get ItemByKey(aKey As String)
 End Property
 
 Public Property Get IndexOf(Value) As Long
-    Dim i As Long, Obj As Object
+    Dim i As Long, obj As Object
     IndexOf = -1 'first we assume its not in list
     If m_IsHashed Then
         Dim Key As String
         Select Case m_DataType
-        Case vbObject: Set Obj = Value: Key = Obj.Key
+        Case vbObject: Set obj = Value: Key = obj.Key
         Case vbString: Key = Value
         Case Else:     Key = Value
         End Select
@@ -936,8 +935,8 @@ Public Sub Remove(ByVal Index As Long)
     If m_IsHashed Then ReInitIndices
 End Sub
 
-Public Sub RemoveObj(Obj As Object)
-    Dim i As Long: i = IndexOf(Obj)
+Public Sub RemoveObj(obj As Object)
+    Dim i As Long: i = IndexOf(obj)
     'if Obj is not contained IndexOf returns -1
     If i < 0 Then Exit Sub
     Remove i
@@ -1091,11 +1090,11 @@ End Sub
 
 ' Die Rekursive datenunabhängige Methode QuickSort
 Private Sub QuickSortVar(ByVal i1 As Long, ByVal i2 As Long)
-    Dim T As Long
+    Dim t As Long
     If i2 > i1 Then
-        T = divideVar(i1, i2)
-        Call QuickSortVar(i1, T - 1)
-        Call QuickSortVar(T + 1, i2)
+        t = divideVar(i1, i2)
+        Call QuickSortVar(i1, t - 1)
+        Call QuickSortVar(t + 1, i2)
     End If
 End Sub
 Private Function divideVar(ByVal i1 As Long, ByVal i2 As Long) As Long
@@ -1124,11 +1123,11 @@ End Sub
 
 ' Die Rekursive datenunabhängige Methode QuickSort für Strings
 Private Sub QuickSortStr(ByVal i1 As Long, ByVal i2 As Long)
-    Dim T As Long
+    Dim t As Long
     If i2 > i1 Then
-        T = divideStr(i1, i2)
-        Call QuickSortStr(i1, T - 1)
-        Call QuickSortStr(T + 1, i2)
+        t = divideStr(i1, i2)
+        Call QuickSortStr(i1, t - 1)
+        Call QuickSortStr(t + 1, i2)
     End If
 End Sub
 Private Function divideStr(ByVal i1 As Long, ByVal i2 As Long) As Long
@@ -1157,11 +1156,11 @@ End Sub
 
 ' Die Rekursive datenunabhängige Methode QuickSort
 Private Sub QuickSortObj(ByVal i1 As Long, ByVal i2 As Long)
-    Dim T As Long
+    Dim t As Long
     If i2 > i1 Then
-        T = divideObj(i1, i2)
-        Call QuickSortObj(i1, T - 1)
-        Call QuickSortObj(T + 1, i2)
+        t = divideObj(i1, i2)
+        Call QuickSortObj(i1, t - 1)
+        Call QuickSortObj(t + 1, i2)
     End If
 End Sub
 Private Function divideObj(ByVal i1 As Long, ByVal i2 As Long) As Long
@@ -1184,7 +1183,7 @@ Private Function CompareObj(ByVal i1 As Long, ByVal i2 As Long) As Long
     Dim Obj1 As Object: Set Obj1 = m_Arr(i1)
     Dim Obj2 As Object: Set Obj2 = m_Arr(i2)
     'CompareObj = m_Arr(i1).Compare(m_Arr(i2))
-    CompareObj = Obj1.compare(Obj2)
+    CompareObj = Obj1.Compare(Obj2)
 End Function
 Private Sub SwapObj(ByVal i1 As Long, ByVal i2 As Long)
     Dim tmp As Object: Set tmp = m_Arr(i1)
@@ -1239,9 +1238,9 @@ Public Sub ToListbox(aLBorCB, Optional ByVal UseListIndex As Boolean = False, Op
     End If
 End Sub
 Public Function ToArray()
-    Dim Arr: Arr = m_Arr
-    ReDim Preserve Arr(0 To m_Count - 1)
-    ToArray = Arr
+    Dim arr: arr = m_Arr
+    ReDim Preserve arr(0 To m_Count - 1)
+    ToArray = arr
 End Function
 
 Public Sub Trim()
@@ -1648,7 +1647,7 @@ Public Function LongCount()
     ' * predicate: Eine Funktion, mit der jedes Element auf eine Bedingung überprüft wird.
     LongCount = m_Count
 End Function
-Public Function Sum(Of_TResult As EDataType, lambObj As Object, selectorFunc As String)
+Public Function sum(Of_TResult As EDataType, lambObj As Object, selectorFunc As String)
 '<Erweiterung> Enumerable.Sum(Of TResult)(selector As Func(Of T, TResult)) As TResult
 ' Berechnet die Summe einer Sequenz von TResult-Werte, die durch den Aufruf einer Transformationsfunktion für jedes Element der Eingabesequenz ermittelt werden.
 ' * selector: Eine Transformationsfunktion, die auf jedes Element angewendet werden soll.
@@ -1859,16 +1858,16 @@ Private Sub Stack_Clear()
     Me.Clear
 End Sub
 
-Private Function Stack_Clone() 'As Stack
+Private Function Stack_Clone() As Object 'Stack
     Set Stack_Clone = Me.Clone
 End Function
 
-Private Function Stack_Contains(Obj As Object) As Boolean
-    Stack_Contains = Me.ContainsObj(Obj)
+Private Function Stack_Contains(obj As Object) As Boolean
+    Stack_Contains = Me.ContainsObj(obj)
 End Function
 
-Private Sub Stack_CopyTo(Arr() As Variant)
-    Me.CopyTo Arr
+Private Sub Stack_CopyTo(arr() As Variant)
+    Me.CopyTo arr
 End Sub
 
 Private Property Get Stack_Count() As Long
@@ -1893,9 +1892,9 @@ Private Function Stack_Pop() As Variant
     End If
 End Function
 
-Private Sub Stack_Push(Obj As Variant)
+Private Sub Stack_Push(obj As Variant)
     'Fügt ein Object am Anfang des Stack ein
-    Me.SPush Obj
+    Me.SPush obj
 End Sub
 
 ' ############################## '    Implements Queue    ' ############################## '
@@ -1903,16 +1902,16 @@ Private Sub Queue_Clear()
     Me.Clear
 End Sub
 
-Private Function Queue_Clone() 'As Queue
+Private Function Queue_Clone() As Object ''As Queue
     Set Queue_Clone = Me.Clone
 End Function
 
-Private Function Queue_Contains(Obj) As Boolean
-    Queue_Contains = Me.ContainsObj(Obj)
+Private Function Queue_Contains(obj) As Boolean
+    Queue_Contains = Me.ContainsObj(obj)
 End Function
 
-Private Sub Queue_CopyTo(Arr() As Variant)
-    Me.CopyTo Arr
+Private Sub Queue_CopyTo(arr() As Variant)
+    Me.CopyTo arr
 End Sub
 
 Private Property Get Queue_Count() As Long
@@ -1928,8 +1927,8 @@ Private Function Queue_Dequeue() As Variant
     End If
 End Function
 
-Private Function Queue_Enqueue(Obj) As Variant
-    Me.QEnqueue Obj
+Private Function Queue_Enqueue(obj) As Variant
+    Me.QEnqueue obj
 End Function
 
 Private Function Queue_Peek() As Variant

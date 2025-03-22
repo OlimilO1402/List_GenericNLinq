@@ -13,11 +13,11 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 Public Sub Clear():                       End Sub
-Public Function Clone() As Queue:         End Function
-Public Function Contains(Obj) As Boolean: End Function
+Public Function Clone() As Object:        End Function
+Public Function Contains(obj) As Boolean: End Function
 Public Sub CopyTo(Arr()):                 End Sub
 Public Property Get Count() As Long:      End Property
 Public Function Dequeue():                End Function
-Public Function Enqueue(Obj):             End Function
+Public Function Enqueue(obj):             End Function
 Public Function Peek():                   End Function
 

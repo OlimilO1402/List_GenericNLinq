@@ -19,11 +19,62 @@ Begin VB.Form Form1
    ScaleHeight     =   7710
    ScaleWidth      =   13215
    StartUpPosition =   3  'Windows-Standard
+   Begin VB.CommandButton BtnTestFori 
+      Caption         =   "Test For i"
+      BeginProperty Font 
+         Name            =   "Segoe UI"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   375
+      Left            =   120
+      TabIndex        =   39
+      Top             =   5040
+      Width           =   1575
+   End
+   Begin VB.CommandButton BtnTestForEach 
+      Caption         =   "Test For Each"
+      BeginProperty Font 
+         Name            =   "Segoe UI"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   375
+      Left            =   1800
+      TabIndex        =   38
+      Top             =   5040
+      Width           =   1575
+   End
+   Begin VB.CommandButton BtnTestFori10mio 
+      Caption         =   "Test For i (10mio)"
+      BeginProperty Font 
+         Name            =   "Segoe UI"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   375
+      Left            =   120
+      TabIndex        =   37
+      Top             =   5520
+      Width           =   1575
+   End
    Begin VB.CommandButton BtnQueue 
       Caption         =   "Queue"
       BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   9
+         Name            =   "Segoe UI"
+         Size            =   9.75
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -39,8 +90,8 @@ Begin VB.Form Form1
    Begin VB.CommandButton BtnStack 
       Caption         =   "Stack"
       BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   9
+         Name            =   "Segoe UI"
+         Size            =   9.75
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -53,10 +104,10 @@ Begin VB.Form Form1
       Top             =   120
       Width           =   1215
    End
-   Begin VB.CommandButton BtnTestForEach 
-      Caption         =   "Test For Each"
+   Begin VB.CommandButton BtnTestForEach10mio 
+      Caption         =   "ForEach (10mio)"
       BeginProperty Font 
-         Name            =   "Tahoma"
+         Name            =   "Segoe UI"
          Size            =   9
          Charset         =   0
          Weight          =   400
@@ -65,7 +116,7 @@ Begin VB.Form Form1
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
-      Left            =   120
+      Left            =   1800
       TabIndex        =   34
       Top             =   5520
       Width           =   1575
@@ -73,8 +124,8 @@ Begin VB.Form Form1
    Begin VB.CommandButton BtnInfo 
       Caption         =   "Info"
       BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   9
+         Name            =   "Segoe UI"
+         Size            =   9.75
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -90,8 +141,8 @@ Begin VB.Form Form1
    Begin VB.CommandButton BtnTestvbWChar 
       Caption         =   "Test vbWChar"
       BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   9
+         Name            =   "Segoe UI"
+         Size            =   9.75
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -107,8 +158,8 @@ Begin VB.Form Form1
    Begin VB.CommandButton BtnTestSelect2 
       Caption         =   "Test Select2"
       BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   9
+         Name            =   "Segoe UI"
+         Size            =   9.75
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -124,8 +175,8 @@ Begin VB.Form Form1
    Begin VB.CommandButton BtnTestSelect1 
       Caption         =   "Test Select1"
       BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   9
+         Name            =   "Segoe UI"
+         Size            =   9.75
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -157,8 +208,8 @@ Begin VB.Form Form1
    Begin VB.CommandButton BtnBack 
       Caption         =   "< Back"
       BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   9
+         Name            =   "Segoe UI"
+         Size            =   9.75
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -181,8 +232,8 @@ Begin VB.Form Form1
    Begin VB.CommandButton BtnClone 
       Caption         =   "Clone >"
       BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   9
+         Name            =   "Segoe UI"
+         Size            =   9.75
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -198,8 +249,8 @@ Begin VB.Form Form1
    Begin VB.CommandButton BtnSortDown 
       Caption         =   "Sort v"
       BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   9
+         Name            =   "Segoe UI"
+         Size            =   9.75
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -215,8 +266,8 @@ Begin VB.Form Form1
    Begin VB.CommandButton BtnSortUp 
       Caption         =   "Sort ^"
       BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   9
+         Name            =   "Segoe UI"
+         Size            =   9.75
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -232,8 +283,8 @@ Begin VB.Form Form1
    Begin VB.CommandButton BtnMoveDown 
       Caption         =   "Move v"
       BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   9
+         Name            =   "Segoe UI"
+         Size            =   9.75
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -249,8 +300,8 @@ Begin VB.Form Form1
    Begin VB.CommandButton BtnClearAll 
       Caption         =   "ClearAll"
       BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   9
+         Name            =   "Segoe UI"
+         Size            =   9.75
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -266,8 +317,8 @@ Begin VB.Form Form1
    Begin VB.CommandButton BtnSearch 
       Caption         =   "Search"
       BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   9
+         Name            =   "Segoe UI"
+         Size            =   9.75
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -283,8 +334,8 @@ Begin VB.Form Form1
    Begin VB.CommandButton BtnDelete 
       Caption         =   "Delete"
       BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   9
+         Name            =   "Segoe UI"
+         Size            =   9.75
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -300,8 +351,8 @@ Begin VB.Form Form1
    Begin VB.CommandButton BtnMoveUp 
       Caption         =   "Move ^"
       BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   9
+         Name            =   "Segoe UI"
+         Size            =   9.75
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -317,8 +368,8 @@ Begin VB.Form Form1
    Begin VB.CommandButton BtnInsert 
       Caption         =   "Insert"
       BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   9
+         Name            =   "Segoe UI"
+         Size            =   9.75
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -334,8 +385,8 @@ Begin VB.Form Form1
    Begin VB.CommandButton BtnEdit 
       Caption         =   "Edit"
       BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   9
+         Name            =   "Segoe UI"
+         Size            =   9.75
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -351,8 +402,8 @@ Begin VB.Form Form1
    Begin VB.CommandButton BtnAdd 
       Caption         =   "Add"
       BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   9
+         Name            =   "Segoe UI"
+         Size            =   9.75
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -403,8 +454,8 @@ Begin VB.Form Form1
    Begin VB.CommandButton BtnTestWhere 
       Caption         =   "Test Where"
       BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   9
+         Name            =   "Segoe UI"
+         Size            =   9.75
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -420,8 +471,8 @@ Begin VB.Form Form1
    Begin VB.CommandButton BtnCreate 
       Caption         =   "Create Random List"
       BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   9
+         Name            =   "Segoe UI"
+         Size            =   9.75
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -444,8 +495,8 @@ Begin VB.Form Form1
    Begin VB.Label Label8 
       Caption         =   "Test functions similar to Linq:"
       BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   9
+         Name            =   "Segoe UI"
+         Size            =   9.75
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -462,7 +513,7 @@ Begin VB.Form Form1
       AutoSize        =   -1  'True
       Caption         =   "Count:"
       BeginProperty Font 
-         Name            =   "Tahoma"
+         Name            =   "Segoe UI"
          Size            =   9.75
          Charset         =   0
          Weight          =   400
@@ -470,26 +521,35 @@ Begin VB.Form Form1
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Height          =   240
+      Height          =   255
       Left            =   120
       TabIndex        =   28
       Top             =   1320
-      Width           =   570
+      Width           =   555
    End
    Begin VB.Label Label6 
       AutoSize        =   -1  'True
       Caption         =   "           "
-      Height          =   225
+      BeginProperty Font 
+         Name            =   "Segoe UI"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   255
       Left            =   120
       TabIndex        =   13
       Top             =   2880
-      Width           =   1155
+      Width           =   660
    End
    Begin VB.Label Label5 
       AutoSize        =   -1  'True
       Caption         =   "GrowSize:"
       BeginProperty Font 
-         Name            =   "Tahoma"
+         Name            =   "Segoe UI"
          Size            =   9.75
          Charset         =   0
          Weight          =   400
@@ -497,17 +557,17 @@ Begin VB.Form Form1
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Height          =   240
+      Height          =   255
       Left            =   120
       TabIndex        =   11
       Top             =   2400
-      Width           =   885
+      Width           =   855
    End
    Begin VB.Label Label4 
       AutoSize        =   -1  'True
       Caption         =   "GrowRate:"
       BeginProperty Font 
-         Name            =   "Tahoma"
+         Name            =   "Segoe UI"
          Size            =   9.75
          Charset         =   0
          Weight          =   400
@@ -515,17 +575,17 @@ Begin VB.Form Form1
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Height          =   240
+      Height          =   255
       Left            =   120
       TabIndex        =   9
       Top             =   2040
-      Width           =   915
+      Width           =   900
    End
    Begin VB.Label Label3 
       AutoSize        =   -1  'True
       Caption         =   "Capacity:"
       BeginProperty Font 
-         Name            =   "Tahoma"
+         Name            =   "Segoe UI"
          Size            =   9.75
          Charset         =   0
          Weight          =   400
@@ -533,17 +593,17 @@ Begin VB.Form Form1
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Height          =   240
+      Height          =   255
       Left            =   120
       TabIndex        =   6
       Top             =   1680
-      Width           =   795
+      Width           =   780
    End
    Begin VB.Label Label2 
       AutoSize        =   -1  'True
       Caption         =   "IsHashed:"
       BeginProperty Font 
-         Name            =   "Tahoma"
+         Name            =   "Segoe UI"
          Size            =   9.75
          Charset         =   0
          Weight          =   400
@@ -551,29 +611,29 @@ Begin VB.Form Form1
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Height          =   240
+      Height          =   255
       Left            =   120
       TabIndex        =   5
       Top             =   960
-      Width           =   855
+      Width           =   840
    End
    Begin VB.Label Label1 
       AutoSize        =   -1  'True
       Caption         =   "Datatype:"
       BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   9
+         Name            =   "Segoe UI"
+         Size            =   9.75
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Height          =   210
+      Height          =   255
       Left            =   120
       TabIndex        =   4
       Top             =   600
-      Width           =   810
+      Width           =   825
    End
 End
 Attribute VB_Name = "Form1"
@@ -589,14 +649,16 @@ Private Sub BtnInfo_Click()
     MsgBox App.CompanyName & " " & App.EXEName & " v" & App.Major & "." & App.Minor & "." & App.Revision & vbCrLf & App.FileDescription, vbInformation Or vbOKOnly
 End Sub
 
-Private Sub BtnTestForEach_Click()
-    MsgBox "Clearing the listbox"
-    List1.Clear
-    MsgBox "Running through the list by using For Each and filling the listbox again."
-    Dim V, o As Object
+
+Private Sub BtnTestFori_Click()
+    If m_List Is Nothing Then
+        MsgBox "List is nothing, click button '" & BtnCreate.Caption & "' first."
+        Exit Sub
+    End If
+    Dim i As Long, v, o As Object
     If m_List.DataType = vbObject Then
-        For Each V In m_List.GetEnumerator
-            Set o = V
+        For i = 0 To m_List.Count - 1
+            Set o = m_List.Item(i)
             List1.AddItem o.ToStr
         Next
     Else
@@ -604,10 +666,72 @@ Private Sub BtnTestForEach_Click()
             MsgBox "List is empty, can not proceed!"
             Exit Sub
         End If
-        For Each V In m_List.GetEnumerator
-            List1.AddItem CStr(V)
+        For i = 0 To m_List.Count - 1
+            v = m_List.Item(i)
+            List1.AddItem CStr(v)
         Next
     End If
+End Sub
+
+Private Sub BtnTestForEach_Click()
+    If m_List Is Nothing Then
+        MsgBox "List is nothing, click button '" & BtnCreate.Caption & "' first."
+        Exit Sub
+    End If
+    Dim v, o As Object
+    If m_List.DataType = vbObject Then
+        For Each v In m_List.GetEnumerator
+            Set o = v
+            List1.AddItem o.ToStr
+        Next
+    Else
+        If m_List.Count = 0 Then
+            MsgBox "List is empty, can not proceed!"
+            Exit Sub
+        End If
+        For Each v In m_List.GetEnumerator
+            List1.AddItem CStr(v)
+        Next
+    End If
+End Sub
+
+Private Sub Fill10mioDbl(li As List) 'Of double
+    If li.DataType <> vbDouble Then
+        MsgBox "Create list first"
+    End If
+    li.Clear
+    Dim i As Long, c As Long: c = 10000000 '
+    For i = 0 To c - 1
+        li.Add i * Rnd
+    Next
+End Sub
+
+Private Sub BtnTestFori10mio_Click()
+    Dim myList As List: Set myList = MNew.List(vbDouble, , False, 10000000)
+    MsgBox "Filling List with 10 mio random doubles"
+    Fill10mioDbl myList
+    MsgBox "Running through List with 10 mio random doubles, using For i"
+    Dim dt As Single: dt = Timer
+    Dim i As Long, d As Double
+    For i = 0 To myList.Count - 1
+        d = myList.Item(i)
+    Next
+    dt = Timer - dt
+    MsgBox dt
+End Sub
+
+Private Sub BtnTestForEach10mio_Click()
+    Dim myList As List: Set myList = MNew.List(vbDouble, , False, 10000000)
+    MsgBox "Filling List with 10 mio random doubles"
+    Fill10mioDbl myList
+    MsgBox "Running through List with 10 mio random doubles, using For Each"
+    Dim dt As Single: dt = Timer
+    Dim v, d As Double
+    For Each v In myList.GetEnumerator
+        d = v
+    Next
+    dt = Timer - dt
+    MsgBox dt
 End Sub
 
 Private Sub Form_Load()
@@ -697,50 +821,50 @@ Sub AddRandom(nCount As Long)
     Randomize
     Dim dt As EDataType: dt = m_List.DataType
     Dim i As Long, u As Long: u = IIf(nCount, nCount - 1, 10 + Rnd * 40) 'zw 10 und 50 Elemente
-    Dim Arr
+    Dim arr
     Select Case dt
     Case EDataType.vbInteger, EDataType.vbUInteger:
-                        ReDim Arr(0 To u) As Integer
-                        For i = 0 To u: Arr(i) = Rnd * 65535 - 32768: Next
+                        ReDim arr(0 To u) As Integer
+                        For i = 0 To u: arr(i) = Rnd * 65535 - 32768: Next
     Case EDataType.vbLong, EDataType.vbULong:
-                        ReDim Arr(0 To u) As Long
-                        For i = 0 To u: Arr(i) = (Rnd - 0.5) * 2 * 2147483647: Next
+                        ReDim arr(0 To u) As Long
+                        For i = 0 To u: arr(i) = (Rnd - 0.5) * 2 * 2147483647: Next
     Case EDataType.vbSingle:
-                        ReDim Arr(0 To u) As Single
-                        For i = 0 To u: Arr(i) = (Rnd - 0.5) * 2 * 1000000: Next
+                        ReDim arr(0 To u) As Single
+                        For i = 0 To u: arr(i) = (Rnd - 0.5) * 2 * 1000000: Next
     Case EDataType.vbDouble:
-                        ReDim Arr(0 To u) As Double
-                        For i = 0 To u: Arr(i) = (Rnd - 0.5) * 2 * 100000000000#: Next
+                        ReDim arr(0 To u) As Double
+                        For i = 0 To u: arr(i) = (Rnd - 0.5) * 2 * 100000000000#: Next
     Case EDataType.vbCurrency, EDataType.vbLongLong, EDataType.vbULongLong:
-                        ReDim Arr(0 To u) As Currency
-                        For i = 0 To u: Arr(i) = (Rnd - 0.5) * 2 * 100000000000#: Next
+                        ReDim arr(0 To u) As Currency
+                        For i = 0 To u: arr(i) = (Rnd - 0.5) * 2 * 100000000000#: Next
     Case EDataType.vbDate:
-                        ReDim Arr(0 To u) As Date
-                        For i = 0 To u: Arr(i) = Now - CDate(Rnd * 100): Next
+                        ReDim arr(0 To u) As Date
+                        For i = 0 To u: arr(i) = Now - CDate(Rnd * 100): Next
     Case EDataType.vbBoolean:
-                        ReDim Arr(0 To u) As Boolean
-                        For i = 0 To u: Arr(i) = CBool(Max((Rnd - 0.5), 0)): Next
+                        ReDim arr(0 To u) As Boolean
+                        For i = 0 To u: arr(i) = CBool(Max((Rnd - 0.5), 0)): Next
     Case EDataType.vbByte, EDataType.vbSByte:
-                        ReDim Arr(0 To u) As Byte
-                        For i = 0 To u: Arr(i) = (Rnd) * 255: Next
+                        ReDim arr(0 To u) As Byte
+                        For i = 0 To u: arr(i) = (Rnd) * 255: Next
     Case vbDecimal:
-                        ReDim Arr(0 To u)
-                        For i = 0 To u: Arr(i) = CDec(Rnd * CDec(16777216)): Next
+                        ReDim arr(0 To u)
+                        For i = 0 To u: arr(i) = CDec(Rnd * CDec(16777216)): Next
     Case vbString:
-                        ReDim Arr(0 To u) As String
-                        For i = 0 To u: Arr(i) = MNew.RndName: Next
+                        ReDim arr(0 To u) As String
+                        For i = 0 To u: arr(i) = MNew.RndName: Next
     Case vbWChar:
-                        Arr = "Dies ist ein Teststring"
+                        arr = "Dies ist ein Teststring"
     Case vbUserDefinedType:
-                        ReDim Arr(0 To u) As GridSettingsType
-                        For i = 0 To u: Arr(i) = MNew.GridSettingsTypeRnd: Next
+                        ReDim arr(0 To u) As GridSettingsType
+                        For i = 0 To u: arr(i) = MNew.GridSettingsTypeRnd: Next
     Case vbObject:
-                        ReDim Arr(0 To u) As Person
-                        For i = 0 To u: Set Arr(i) = MNew.PersonRnd: Next
+                        ReDim arr(0 To u) As Person
+                        For i = 0 To u: Set arr(i) = MNew.PersonRnd: Next
     Case vbVariant:
-                        Arr = Array(1, "eins", 123456789, 123.456798, PersonRnd, Now)
+                        arr = Array(1, "eins", 123456789, 123.456798, PersonRnd, Now)
     End Select
-    m_List.AddRange Arr
+    m_List.AddRange arr
 End Sub
 
 Sub UpdateView(Optional OnlyInfo As Boolean = False)
@@ -881,13 +1005,13 @@ Private Sub BtnEdit_Click()
 Try: On Error GoTo Catch
     Dim i As Long:   i = LBGetListIndex(List1)
     Dim s As String
-    Dim V
+    Dim v
     Select Case m_List.DataType
     Case vbObject:  s = m_List.Item(i).ToStr
     Case vbVariant: 'v = m_List.Item(i)
                     If VarType(m_List.Item(i)) = vbObject Then
-                        Set V = m_List.Item(i)
-                        s = V.ToStr
+                        Set v = m_List.Item(i)
+                        s = v.ToStr
                     Else
                         s = m_List.Item(i)
                     End If
@@ -1005,17 +1129,17 @@ End Sub
 
 Sub List2Show(bShow As Boolean)
     Dim brdr As Single: brdr = 8 * Screen.TwipsPerPixelX
-    Dim L As Single: L = List1.Left
-    Dim T As Single: T = List1.Top
+    Dim l As Single: l = List1.Left
+    Dim t As Single: t = List1.Top
     Dim W As Single: W = List1.Width
     Dim H As Single: H = List1.Height
     If bShow Then
-        L = L + brdr + W
+        l = l + brdr + W
         List2.ZOrder 0
     Else
         List1.ZOrder 0
     End If
-    If W > 0 And H > 0 Then List2.Move L, T, W, H
+    If W > 0 And H > 0 Then List2.Move l, t, W, H
 End Sub
 Private Sub BtnBack_Click()
     Set m_ListClone = Nothing
@@ -1026,18 +1150,18 @@ End Sub
 
 Private Sub Form_Resize()
     Dim brdr As Single: brdr = 8 * Screen.TwipsPerPixelX
-    Dim L As Single: L = List1.Left
-    Dim T As Single: T = List1.Top
-    Dim W As Single: W = Me.ScaleWidth - L - brdr 'List1.Width
+    Dim l As Single: l = List1.Left
+    Dim t As Single: t = List1.Top
+    Dim W As Single: W = Me.ScaleWidth - l - brdr 'List1.Width
     Dim H As Single: H = Me.ScaleHeight - List1.Top - brdr
     If W > 0 And H > 0 Then
-        List1.Move L, T, W, H
-        List2.Move L, T, W, H
+        List1.Move l, t, W, H
+        List2.Move l, t, W, H
     End If
     If BtnBack.Enabled Then
-        L = L + W + brdr
+        l = l + W + brdr
         'W = L + W + 8 * Screen.TwipsPerPixelX
-        If W > 0 And H > 0 Then List2.Move L, T, W, H
+        If W > 0 And H > 0 Then List2.Move l, t, W, H
     End If
 End Sub
 
@@ -1318,60 +1442,60 @@ Private Sub BtnStack_Click()
     '
     List1.Clear
     Dim st As Stack: Set st = MNew.Stack(vbObject)
-    Dim p1 As Person, p2 As Person
+    Dim P1 As Person, P2 As Person
     
-    Set p1 = MNew.PersonRnd
-    List1.AddItem "p1 = New Person(Name:=" & p1.Name & ")"
-    
-    List1.AddItem "Stack.Push p1"
-    st.Push p1
-    
-    List1.AddItem "p2 = Stack.Peek"
-    Set p2 = st.Peek
-    List1.AddItem "p2.Name = " & p2.Name
-    
-    Set p1 = MNew.PersonRnd
-    List1.AddItem "p1 = New Person(Name:=" & p1.Name & ")"
+    Set P1 = MNew.PersonRnd
+    List1.AddItem "p1 = New Person(Name:=" & P1.Name & ")"
     
     List1.AddItem "Stack.Push p1"
-    st.Push p1
+    st.Push P1
     
     List1.AddItem "p2 = Stack.Peek"
-    Set p2 = st.Peek
-    List1.AddItem "p2.Name = " & p2.Name
+    Set P2 = st.Peek
+    List1.AddItem "p2.Name = " & P2.Name
     
-    Set p1 = MNew.PersonRnd
-    st.Push p1
-    List1.AddItem "Stack.Push New Person(Name:=" & p1.Name & ")"
+    Set P1 = MNew.PersonRnd
+    List1.AddItem "p1 = New Person(Name:=" & P1.Name & ")"
     
-    Set p1 = MNew.PersonRnd
-    st.Push p1
-    List1.AddItem "Stack.Push New Person(Name:=" & p1.Name & ")"
+    List1.AddItem "Stack.Push p1"
+    st.Push P1
     
-    Set p1 = MNew.PersonRnd
-    st.Push p1
-    List1.AddItem "Stack.Push New Person(Name:=" & p1.Name & ")"
+    List1.AddItem "p2 = Stack.Peek"
+    Set P2 = st.Peek
+    List1.AddItem "p2.Name = " & P2.Name
+    
+    Set P1 = MNew.PersonRnd
+    st.Push P1
+    List1.AddItem "Stack.Push New Person(Name:=" & P1.Name & ")"
+    
+    Set P1 = MNew.PersonRnd
+    st.Push P1
+    List1.AddItem "Stack.Push New Person(Name:=" & P1.Name & ")"
+    
+    Set P1 = MNew.PersonRnd
+    st.Push P1
+    List1.AddItem "Stack.Push New Person(Name:=" & P1.Name & ")"
         
     List1.AddItem "Stack.Count=" & st.Count
     
-    Set p2 = st.Pop
-    List1.AddItem "p2 = Stack.Pop: p2.Name=" & p2.Name
+    Set P2 = st.Pop
+    List1.AddItem "p2 = Stack.Pop: p2.Name=" & P2.Name
     List1.AddItem "Stack.Count=" & st.Count
     
-    Set p2 = st.Pop
-    List1.AddItem "p2 = Stack.Pop: p2.Name=" & p2.Name
+    Set P2 = st.Pop
+    List1.AddItem "p2 = Stack.Pop: p2.Name=" & P2.Name
     List1.AddItem "Stack.Count=" & st.Count
     
-    Set p2 = st.Pop
-    List1.AddItem "p2 = Stack.Pop: p2.Name=" & p2.Name
+    Set P2 = st.Pop
+    List1.AddItem "p2 = Stack.Pop: p2.Name=" & P2.Name
     List1.AddItem "Stack.Count=" & st.Count
     
-    Set p2 = st.Pop
-    List1.AddItem "p2 = Stack.Pop: p2.Name=" & p2.Name
+    Set P2 = st.Pop
+    List1.AddItem "p2 = Stack.Pop: p2.Name=" & P2.Name
     List1.AddItem "Stack.Count=" & st.Count
     
-    Set p2 = st.Pop
-    List1.AddItem "p2 = Stack.Pop: p2.Name=" & p2.Name
+    Set P2 = st.Pop
+    List1.AddItem "p2 = Stack.Pop: p2.Name=" & P2.Name
     List1.AddItem "Stack.Count=" & st.Count
     
 End Sub
@@ -1382,35 +1506,35 @@ Private Sub BtnQueue_Click()
     'a Queue is like a billardstick, like a cache, like a waiting line, like a FiFo First-in-First-out
     
     Dim qu As Queue: Set qu = MNew.Queue(vbObject)
-    Dim p1 As Person, p2 As Person
+    Dim P1 As Person, P2 As Person
     
-    Set p1 = MNew.PersonRnd
-    MsgBox "New Person p1, Name=" & p1.Name
-    qu.Enqueue p1
+    Set P1 = MNew.PersonRnd
+    MsgBox "New Person p1, Name=" & P1.Name
+    qu.Enqueue P1
     MsgBox "Queue.Enqueue p1"
-    Set p2 = qu.Peek
-    MsgBox "p2 = Queue.Peek: p2.Name = " & p2.Name
+    Set P2 = qu.Peek
+    MsgBox "p2 = Queue.Peek: p2.Name = " & P2.Name
     
-    Set p1 = MNew.PersonRnd
-    MsgBox "New Person p1, Name=" & p1.Name
-    qu.Enqueue p1
+    Set P1 = MNew.PersonRnd
+    MsgBox "New Person p1, Name=" & P1.Name
+    qu.Enqueue P1
     MsgBox "Queue.Enqueue p1"
-    Set p2 = qu.Peek
-    MsgBox "p2 = Queue.Peek: p2.Name = " & p2.Name
+    Set P2 = qu.Peek
+    MsgBox "p2 = Queue.Peek: p2.Name = " & P2.Name
     
-    Set p1 = MNew.PersonRnd
-    MsgBox "New Person p1, Name=" & p1.Name
-    qu.Enqueue p1
+    Set P1 = MNew.PersonRnd
+    MsgBox "New Person p1, Name=" & P1.Name
+    qu.Enqueue P1
     MsgBox "Queue.Enqueue p1"
-    Set p2 = qu.Peek
-    MsgBox "p2 = Queue.Peek: p2.Name = " & p2.Name
+    Set P2 = qu.Peek
+    MsgBox "p2 = Queue.Peek: p2.Name = " & P2.Name
     
-    Set p1 = MNew.PersonRnd
-    MsgBox "New Person p1, Name=" & p1.Name
-    qu.Enqueue p1
+    Set P1 = MNew.PersonRnd
+    MsgBox "New Person p1, Name=" & P1.Name
+    qu.Enqueue P1
     MsgBox "Queue.Enqueue p1"
-    Set p2 = qu.Peek
-    MsgBox "p2 = Queue.Peek: p2.Name = " & p2.Name
+    Set P2 = qu.Peek
+    MsgBox "p2 = Queue.Peek: p2.Name = " & P2.Name
     
     MsgBox "Queue.Count: " & qu.Count
     
