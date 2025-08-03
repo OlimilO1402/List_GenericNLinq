@@ -13,7 +13,9 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 #If ListAsStack Then
-Implements Stack
+'Wenn der VB-Compiler meldet: "Benutzerdefinierter Typ nicht definiert", dann liegt das vermutlich an Class List Implements Stack
+'dann dieses Implements deaktivieren durch auskommentieren, dort wo Stack gebraucht wird, wieder aktivieren.
+'Implements Stack
 #End If
 '#If ListAsQueue Then
 'Implements Queue
@@ -153,9 +155,9 @@ Friend Sub NewC(other As List)
     End With
 End Sub
 
-Private Sub InitGenericArray(t As EDataType)
+Private Sub InitGenericArray(T As EDataType)
     Dim u As Long: u = m_Capacity + 1
-    Select Case t
+    Select Case T
     Case EDataType.vbInteger:    ReDim m_Arr(0 To u) As Integer:   m_bytLen = 2
     Case EDataType.vbUInteger:   ReDim m_Arr(0 To u) As Integer:   m_bytLen = 2
     Case EDataType.vbLong:       ReDim m_Arr(0 To u) As Long:      m_bytLen = 4
@@ -185,7 +187,7 @@ Private Sub InitGenericArray(t As EDataType)
     'wait for Add
     'Case vbArray:
     Case Else 'Fehlermeldung ausgeben
-        MsgBox "Datatype not supported yet: " & EDataType_ToStr(t)
+        MsgBox "Datatype not supported yet: " & EDataType_ToStr(T)
     End Select
     'm_bytLen = LenB(m_Arr(0))
 End Sub
@@ -220,9 +222,9 @@ Friend Function GetType() As String
 End Function
 
 'Siehe auch Extra Projekt in der diese Funktion ausgiebig getestet wird
-Private Function EDataType_ToStr(t As EDataType) As String
+Private Function EDataType_ToStr(T As EDataType) As String
     Dim s As String
-    Select Case t
+    Select Case T
     Case vbInteger:         s = "Integer"    ' vbInteger    = 2
     Case vbLong:            s = "Long"       ' vbLong       = 3
     Case vbSingle:          s = "Single"     ' vbSingle     = 4
@@ -249,8 +251,8 @@ Private Function EDataType_ToStr(t As EDataType) As String
     Case vbWChar:           s = "WChar"
     'Case vbArray:      s = "Array"      ' vbArray      = 8192 (&H2000)
     Case Else:
-        If t And vbByRef Then s = "ByRef "
-        If t And vbArray Then s = "Array As " Else s = "Type still undefined"
+        If T And vbByRef Then s = "ByRef "
+        If T And vbArray Then s = "Array As " Else s = "Type still undefined"
     End Select
     EDataType_ToStr = s
 End Function
@@ -419,16 +421,16 @@ Public Sub AddRange(aArr) 'As List
             'für String
             If VarType(aArr) = vbString Then
                 Dim bl As Long: bl = LenB(aArr)
-                Dim l As Long: l = bl / 2
+                Dim L As Long: L = bl / 2
                 If m_IsHashed Then
-                    For i = 1 To l
+                    For i = 1 To L
                         Me.Add AscW(Mid$(aArr, i, 1))
                     Next
                 Else
-                    EnsureCapacity m_Count + l
+                    EnsureCapacity m_Count + L
                     Dim pDst As Long: pDst = DataPtrI(m_Count)
                     RtlMoveMemory ByVal pDst, ByVal StrPtr(aArr), bl
-                    m_Count = m_Count + l
+                    m_Count = m_Count + L
                 End If
             End If
         ElseIf m_DataType = vbUserDefinedType Then
@@ -488,7 +490,7 @@ Public Function ContainsKey(Key As String) As Boolean
     On Error Resume Next
     If m_IsHashed Then
         If VBA.Information.IsEmpty(m_HashI(Key)) Then: 'DoNothing
-        ContainsKey = (Err.number = 0)
+        ContainsKey = (Err.Number = 0)
     Else
         Dim i As Long
         If m_DataType = vbObject Then
@@ -511,7 +513,7 @@ Public Function ContainsObj(obj, Optional ByVal ObjUseKey As Boolean = False) As
     If m_IsHashed Then
         If m_DataType = vbObject Then Key = obj.Key Else Key = obj
         If VBA.IsEmpty(m_HashI(Key)) Then: 'DoNothing
-        ContainsObj = (Err.number = 0)
+        ContainsObj = (Err.Number = 0)
     Else
         Dim i As Long
         Select Case m_DataType
@@ -1090,11 +1092,11 @@ End Sub
 
 ' Die Rekursive datenunabhängige Methode QuickSort
 Private Sub QuickSortVar(ByVal i1 As Long, ByVal i2 As Long)
-    Dim t As Long
+    Dim T As Long
     If i2 > i1 Then
-        t = divideVar(i1, i2)
-        Call QuickSortVar(i1, t - 1)
-        Call QuickSortVar(t + 1, i2)
+        T = divideVar(i1, i2)
+        Call QuickSortVar(i1, T - 1)
+        Call QuickSortVar(T + 1, i2)
     End If
 End Sub
 Private Function divideVar(ByVal i1 As Long, ByVal i2 As Long) As Long
@@ -1123,11 +1125,11 @@ End Sub
 
 ' Die Rekursive datenunabhängige Methode QuickSort für Strings
 Private Sub QuickSortStr(ByVal i1 As Long, ByVal i2 As Long)
-    Dim t As Long
+    Dim T As Long
     If i2 > i1 Then
-        t = divideStr(i1, i2)
-        Call QuickSortStr(i1, t - 1)
-        Call QuickSortStr(t + 1, i2)
+        T = divideStr(i1, i2)
+        Call QuickSortStr(i1, T - 1)
+        Call QuickSortStr(T + 1, i2)
     End If
 End Sub
 Private Function divideStr(ByVal i1 As Long, ByVal i2 As Long) As Long
@@ -1156,11 +1158,11 @@ End Sub
 
 ' Die Rekursive datenunabhängige Methode QuickSort
 Private Sub QuickSortObj(ByVal i1 As Long, ByVal i2 As Long)
-    Dim t As Long
+    Dim T As Long
     If i2 > i1 Then
-        t = divideObj(i1, i2)
-        Call QuickSortObj(i1, t - 1)
-        Call QuickSortObj(t + 1, i2)
+        T = divideObj(i1, i2)
+        Call QuickSortObj(i1, T - 1)
+        Call QuickSortObj(T + 1, i2)
     End If
 End Sub
 Private Function divideObj(ByVal i1 As Long, ByVal i2 As Long) As Long
