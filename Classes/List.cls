@@ -637,7 +637,7 @@ End Property
 
 Public Property Get IndexOf(Value) As Long
     Dim i As Long, obj As Object
-    IndexOf = -1 'first we assume its not in list
+    IndexOf = -1 'first we assume its not in List
     If m_IsHashed Then
         Dim Key As String
         Select Case m_DataType
@@ -1185,7 +1185,7 @@ Private Function CompareObj(ByVal i1 As Long, ByVal i2 As Long) As Long
     Dim Obj1 As Object: Set Obj1 = m_Arr(i1)
     Dim Obj2 As Object: Set Obj2 = m_Arr(i2)
     'CompareObj = m_Arr(i1).Compare(m_Arr(i2))
-    CompareObj = Obj1.Compare(Obj2)
+    CompareObj = Obj1.compare(Obj2)
 End Function
 Private Sub SwapObj(ByVal i1 As Long, ByVal i2 As Long)
     Dim tmp As Object: Set tmp = m_Arr(i1)
@@ -1458,7 +1458,7 @@ Public Function GroupJoin(Of_TInner As EDataType, TKey As EDataType, TResult As 
 ' * inner:            Die Sequenz, die mit der ersten Sequenz verknüpft werden soll.
 ' * outerKeySelector: Eine Funktion zum Extrahieren des Joinschlüssels aus jedem Element der ersten Sequenz.
 ' * innerKeySelector: Eine Funktion zum Extrahieren des Joinschlüssels aus jedem Element der zweiten Sequenz.
-' * resultSelector:   Eine Funktion zum Erstellen eines Ergebniselements anhand eines Elements aus der ersten Sequenz und einer Auzflistung von übereinstimmenden Elementen aus der zweiten Sequenz.
+' * resultSelector:   Eine Funktion zum Erstellen eines Ergebniselements anhand eines Elements aus der ersten Sequenz und einer AuzfListung von übereinstimmenden Elementen aus der zweiten Sequenz.
 
 '2 v 2:
 '<Erweiterung> Enumerable.GroupJoin(Of TInner, TKey, TResult)(inner As IEnumerable(Of TInner), outerKeySelector As Func(Of T, TKey), innerKeySelector As Func(Of Tinner, TKey), resultSelector As Func(Of T, IEnumerable(Of TInner), TResult)) As IEnumerable(Of TResult)
@@ -1706,7 +1706,7 @@ End Function
 '======================================
 '01:      Sub List(Of T).Add(item As T)                                                                                      ' 01: Fügt am Ende der List ein Objekt hinzu
 '02:      Sub List(Of T).AddRange(Collection As IEnumerable(Of Book))                                                        ' 02: Fügt die Elemente der angegebenen Auflistung der List hinzu
-'03: Function List(Of T).AsReadOnly() As ObjectModel.ReadOnlyCollection(Of T)                                                ' 03: Gibt einen schreibgeschützten ObjectModel.ReadOnlyCollection(Of T)-Wrapper für die aktuelle Auflisting zurück.
+'03: Function List(Of T).AsReadOnly() As ObjectModel.ReadOnlyCollection(Of T)                                                ' 03: Gibt einen schreibgeschützten ObjectModel.ReadOnlyCollection(Of T)-Wrapper für die aktuelle AufListing zurück.
 '04: Function List(Of T).BinarySearch(index As Integer, count as Integer, item As T, comparer As IComparer(Of T)) As Integer ' 11: Durchsucht mithilfe des angegebenen Vergleichs einen Bereich von Elementen in der sortierten List(Of T) nach einem Element und gibt den nullbasierten Index des Elements zurück.
 '05: Property List(Of T).Capacity                                                                                            ' 12: Ruft die Gesamtzahl der Elemente ab, die die interne Datenstruktur ohne Änderung der Größe aufnehmen kann, oder legt diese Anzahl fest.
 '06:      Sub List(Of T).Clear()                                                                                             ' 14: Entfernt alle Elemente aus der List(Of T)
@@ -1754,7 +1754,7 @@ End Function
 '08: Function List(Of T).Average(selector As Func(Of String, Integer)) As Double '(+ 9 Überladungen) ' 10: Berechnet den Durchschnitt einer Sequenz von Integer Werte, die durch den Aufruf einer Transformationsfunktion für jedes Element der Eingabesequenz ermittelt werden.
 '09: Function List(Of T).Cast(Of Byte)         ' 13: Wandelt die Elemente einer IEnumerable in den angegebenen Typ.
 '10: Function List(Of T).Concat                ' 15: Verkettet zwei Sequenzen.
-'11: Function List(Of T).DefaultIfEmpty        ' 20: Gibt die Elemente der angegebenen Sequenz oder den Standardwert des Typparameters in einer Singeltonauflistung zurück, wenn die Sequenz leer ist.
+'11: Function List(Of T).DefaultIfEmpty        ' 20: Gibt die Elemente der angegebenen Sequenz oder den Standardwert des Typparameters in einer SingeltonaufListung zurück, wenn die Sequenz leer ist.
 '12: Function List(Of T).Distinct              ' 21: Gibt mithilfe des Standardgleichheitsvergleichs zum Vergleichen von Werten unterschiedliche Elemente aus einer Sequenz zurück.
 '13: Function List(Of T).ElementAt             ' 22: Gibt das Element am angegebenen Index in einer Sequenz zurück.
 '14: Function List(Of T).ElementAtOrDefault    ' 23: Gibt das Element an einem angegebenen Index in einer Sequenz oder einen Standardwert zurück, wenn der Index außerhalb des gültigen Bereichs liegt.
