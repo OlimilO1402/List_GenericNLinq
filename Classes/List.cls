@@ -96,7 +96,7 @@ Dim m_LambFunc As String
 #Else
     Private Declare Sub RtlMoveMemory Lib "kernel32" (ByRef Dst As Any, ByRef src As Any, ByVal BytLen As Long)
     Private Declare Sub RtlZeroMemory Lib "kernel32" (ByRef Dst As Any, ByVal BytLen As Long)
-    Private Declare Function ArrPtr Lib "msvbvm60" Alias "VarPtr" (ByRef arr() As Any) As Long
+    Private Declare Function ArrPtr Lib "msvbvm60" Alias "VarPtr" (ByRef Arr() As Any) As Long
 #End If
 
 Private Sub Class_Initialize()
@@ -547,8 +547,8 @@ Public Property Get Count() As Long
     Count = m_Count
 End Property
 
-Public Sub CopyTo(arr())
-    arr = m_Arr
+Public Sub CopyTo(Arr())
+    Arr = m_Arr
 End Sub
 
 Public Function GetEnumerator() 'As Variant ' 'As IUnknown
@@ -623,14 +623,36 @@ End Property
 
 Public Property Get ItemByKey(aKey As String)
     'liefert das Element mit dem angegebenen Namen, nur mit IsHashed = True
-    If Not m_IsHashed Then Exit Property
-    If ContainsKey(aKey) Then
-        Dim s As String: s = m_HashI(aKey)
-        Dim i As Long:   i = Split(s, vbNullChar)(1)
+    If m_IsHashed Then
+        If ContainsKey(aKey) Then
+            Dim s As String: s = m_HashI(aKey)
+            Dim i As Long:   i = Split(s, vbNullChar)(1)
+            Select Case m_DataType
+            Case vbObject:  Set ItemByKey = m_Arr(i)
+            Case vbVariant: If IsObject(m_Arr(i)) Then Set ItemByKey = m_Arr(i) Else ItemByKey = m_Arr(i)
+            Case Else:      ItemByKey = m_Arr(i)
+            End Select
+        End If
+    Else
         Select Case m_DataType
-        Case vbObject:  Set ItemByKey = m_Arr(i)
-        Case vbVariant: If IsObject(m_Arr(i)) Then Set ItemByKey = m_Arr(i) Else ItemByKey = m_Arr(i)
-        Case Else:      ItemByKey = m_Arr(i)
+        Case vbObject:
+                        For i = 0 To m_Count - 1
+                            If m_Arr(i).Key = aKey Then
+                                Set ItemByKey = m_Arr(i): Exit Property
+                            End If
+                        Next
+        Case vbString:
+                        For i = 0 To m_Count - 1
+                            If m_Arr(i) = aKey Then
+                                ItemByKey = m_Arr(i): Exit Property
+                            End If
+                        Next
+        Case Else:
+                        For i = 0 To m_Count - 1
+                            If m_Arr(i) = aKey Then
+                                ItemByKey = m_Arr(i): Exit Property
+                            End If
+                        Next
         End Select
     End If
 End Property
@@ -1185,7 +1207,7 @@ Private Function CompareObj(ByVal i1 As Long, ByVal i2 As Long) As Long
     Dim Obj1 As Object: Set Obj1 = m_Arr(i1)
     Dim Obj2 As Object: Set Obj2 = m_Arr(i2)
     'CompareObj = m_Arr(i1).Compare(m_Arr(i2))
-    CompareObj = Obj1.compare(Obj2)
+    CompareObj = Obj1.Compare(Obj2)
 End Function
 Private Sub SwapObj(ByVal i1 As Long, ByVal i2 As Long)
     Dim tmp As Object: Set tmp = m_Arr(i1)
@@ -1240,9 +1262,9 @@ Public Sub ToListbox(aLBorCB, Optional ByVal UseListIndex As Boolean = False, Op
     End If
 End Sub
 Public Function ToArray()
-    Dim arr: arr = m_Arr
-    ReDim Preserve arr(0 To m_Count - 1)
-    ToArray = arr
+    Dim Arr: Arr = m_Arr
+    ReDim Preserve Arr(0 To m_Count - 1)
+    ToArray = Arr
 End Function
 
 Public Sub Trim()
@@ -1591,7 +1613,7 @@ End Function
 Public Function FirstOrDefault()
     '
 End Function
-Public Function Last()
+Public Function last()
     Dim i As Long: i = m_Count - 1
     Select Case m_DataType
     Case vbObject:  Set First = m_Arr(i)
@@ -1868,8 +1890,8 @@ Private Function Stack_Contains(obj As Object) As Boolean
     Stack_Contains = Me.ContainsObj(obj)
 End Function
 
-Private Sub Stack_CopyTo(arr() As Variant)
-    Me.CopyTo arr
+Private Sub Stack_CopyTo(Arr() As Variant)
+    Me.CopyTo Arr
 End Sub
 
 Private Property Get Stack_Count() As Long
@@ -1912,8 +1934,8 @@ Private Function Queue_Contains(obj) As Boolean
     Queue_Contains = Me.ContainsObj(obj)
 End Function
 
-Private Sub Queue_CopyTo(arr() As Variant)
-    Me.CopyTo arr
+Private Sub Queue_CopyTo(Arr() As Variant)
+    Me.CopyTo Arr
 End Sub
 
 Private Property Get Queue_Count() As Long
