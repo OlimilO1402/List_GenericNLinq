@@ -73,22 +73,22 @@ End Enum
 'Class List
 '1823 lines of concentrated power of List for VB6, all in one Class, with a whiff of Generics and LINQ
 'This Class contains the functionality of Collection, List, Enumerable, Stack, Queue and Dictionary what else do you need.
-Dim m_Arr
-Dim m_DataType As EDataType
-Dim m_Capacity As Long   '= 32
-Dim m_GrowRate As Single 'Growfactor
-Dim m_GrowSize As Long   'Chunksize
-Dim m_bytLen   As Long   'The length of one element in bytes
-Dim m_Count    As Long
-Dim m_IsPtr    As Boolean
-Dim m_Index    As Long    'Works like ListIndex for a selected item
-Dim m_Version  As Variant 'Decimal 'Incremented in every Add, Insert or Delete
-Dim m_Name     As String
-Dim m_IsHashed As Boolean
-Dim m_HashI    As Collection
+Private m_Arr
+Private m_DataType As EDataType
+Private m_Capacity As Long    '= 32
+Private m_GrowRate As Single  'Growfactor
+Private m_GrowSize As Long    'Chunksize
+Private m_bytLen   As Long   'The length of one element in bytes
+Private m_Count    As Long
+Private m_IsPtr    As Boolean
+Private m_Index    As Long    'Works like ListIndex for a selected item
+Private m_Version  As Variant 'Decimal 'Incremented in every Add, Insert or Delete
+Private m_Name     As String
+Private m_IsHashed As Boolean
+Private m_HashI    As Collection
 'for lambdas: CallByName(m_LambObj, m_LambFunc)
-Dim m_LambObj  As Object
-Dim m_LambFunc As String
+Private m_LambObj   As Object
+Private m_LambFunc As String
 #If VBA7 Then
     Private Declare PtrSafe Sub RtlMoveMemory Lib "kernel32" (ByRef Dst As Any, ByRef src As Any, ByVal BytLen As Long)
     Private Declare PtrSafe Sub RtlZeroMemory Lib "kernel32" (ByRef Dst As Any, ByVal BytLen As Long)
@@ -155,9 +155,9 @@ Friend Sub NewC(other As List)
     End With
 End Sub
 
-Private Sub InitGenericArray(T As EDataType)
+Private Sub InitGenericArray(t As EDataType)
     Dim u As Long: u = m_Capacity + 1
-    Select Case T
+    Select Case t
     Case EDataType.vbInteger:    ReDim m_Arr(0 To u) As Integer:   m_bytLen = 2
     Case EDataType.vbUInteger:   ReDim m_Arr(0 To u) As Integer:   m_bytLen = 2
     Case EDataType.vbLong:       ReDim m_Arr(0 To u) As Long:      m_bytLen = 4
@@ -187,7 +187,7 @@ Private Sub InitGenericArray(T As EDataType)
     'wait for Add
     'Case vbArray:
     Case Else 'Fehlermeldung ausgeben
-        MsgBox "Datatype not supported yet: " & EDataType_ToStr(T)
+        MsgBox "Datatype not supported yet: " & EDataType_ToStr(t)
     End Select
     'm_bytLen = LenB(m_Arr(0))
 End Sub
@@ -222,9 +222,9 @@ Friend Function GetType() As String
 End Function
 
 'Siehe auch Extra Projekt in der diese Funktion ausgiebig getestet wird
-Private Function EDataType_ToStr(T As EDataType) As String
+Private Function EDataType_ToStr(t As EDataType) As String
     Dim s As String
-    Select Case T
+    Select Case t
     Case vbInteger:         s = "Integer"    ' vbInteger    = 2
     Case vbLong:            s = "Long"       ' vbLong       = 3
     Case vbSingle:          s = "Single"     ' vbSingle     = 4
@@ -251,8 +251,8 @@ Private Function EDataType_ToStr(T As EDataType) As String
     Case vbWChar:           s = "WChar"
     'Case vbArray:      s = "Array"      ' vbArray      = 8192 (&H2000)
     Case Else:
-        If T And vbByRef Then s = "ByRef "
-        If T And vbArray Then s = "Array As " Else s = "Type still undefined"
+        If t And vbByRef Then s = "ByRef "
+        If t And vbArray Then s = "Array As " Else s = "Type still undefined"
     End Select
     EDataType_ToStr = s
 End Function
@@ -421,16 +421,16 @@ Public Sub AddRange(aArr) 'As List
             'für String
             If VarType(aArr) = vbString Then
                 Dim bl As Long: bl = LenB(aArr)
-                Dim L As Long: L = bl / 2
+                Dim l As Long: l = bl / 2
                 If m_IsHashed Then
-                    For i = 1 To L
+                    For i = 1 To l
                         Me.Add AscW(Mid$(aArr, i, 1))
                     Next
                 Else
-                    EnsureCapacity m_Count + L
+                    EnsureCapacity m_Count + l
                     Dim pDst As Long: pDst = DataPtrI(m_Count)
                     RtlMoveMemory ByVal pDst, ByVal StrPtr(aArr), bl
-                    m_Count = m_Count + L
+                    m_Count = m_Count + l
                 End If
             End If
         ElseIf m_DataType = vbUserDefinedType Then
@@ -490,7 +490,7 @@ Public Function ContainsKey(Key As String) As Boolean
     On Error Resume Next
     If m_IsHashed Then
         If VBA.Information.IsEmpty(m_HashI(Key)) Then: 'DoNothing
-        ContainsKey = (Err.Number = 0)
+        ContainsKey = (Err.number = 0)
     Else
         Dim i As Long
         If m_DataType = vbObject Then
@@ -513,7 +513,7 @@ Public Function ContainsObj(obj, Optional ByVal ObjUseKey As Boolean = False) As
     If m_IsHashed Then
         If m_DataType = vbObject Then Key = obj.Key Else Key = obj
         If VBA.IsEmpty(m_HashI(Key)) Then: 'DoNothing
-        ContainsObj = (Err.Number = 0)
+        ContainsObj = (Err.number = 0)
     Else
         Dim i As Long
         Select Case m_DataType
@@ -1114,11 +1114,11 @@ End Sub
 
 ' Die Rekursive datenunabhängige Methode QuickSort
 Private Sub QuickSortVar(ByVal i1 As Long, ByVal i2 As Long)
-    Dim T As Long
+    Dim t As Long
     If i2 > i1 Then
-        T = divideVar(i1, i2)
-        Call QuickSortVar(i1, T - 1)
-        Call QuickSortVar(T + 1, i2)
+        t = divideVar(i1, i2)
+        Call QuickSortVar(i1, t - 1)
+        Call QuickSortVar(t + 1, i2)
     End If
 End Sub
 Private Function divideVar(ByVal i1 As Long, ByVal i2 As Long) As Long
@@ -1147,11 +1147,11 @@ End Sub
 
 ' Die Rekursive datenunabhängige Methode QuickSort für Strings
 Private Sub QuickSortStr(ByVal i1 As Long, ByVal i2 As Long)
-    Dim T As Long
+    Dim t As Long
     If i2 > i1 Then
-        T = divideStr(i1, i2)
-        Call QuickSortStr(i1, T - 1)
-        Call QuickSortStr(T + 1, i2)
+        t = divideStr(i1, i2)
+        Call QuickSortStr(i1, t - 1)
+        Call QuickSortStr(t + 1, i2)
     End If
 End Sub
 Private Function divideStr(ByVal i1 As Long, ByVal i2 As Long) As Long
@@ -1180,11 +1180,11 @@ End Sub
 
 ' Die Rekursive datenunabhängige Methode QuickSort
 Private Sub QuickSortObj(ByVal i1 As Long, ByVal i2 As Long)
-    Dim T As Long
+    Dim t As Long
     If i2 > i1 Then
-        T = divideObj(i1, i2)
-        Call QuickSortObj(i1, T - 1)
-        Call QuickSortObj(T + 1, i2)
+        t = divideObj(i1, i2)
+        Call QuickSortObj(i1, t - 1)
+        Call QuickSortObj(t + 1, i2)
     End If
 End Sub
 Private Function divideObj(ByVal i1 As Long, ByVal i2 As Long) As Long
